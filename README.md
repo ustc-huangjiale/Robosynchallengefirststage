@@ -1,10 +1,10 @@
 # RoboSynChallenge First Stage
 
-第一阶段十个任务的模型适配器、官方评测配置与复现说明。本仓库不包含 checkpoint、数据集、RoboSynChallenge资源文件或第三方源码；checkpoint后续发布到Hugging Face。
+第一阶段十个任务的模型适配器、评测配置与复现说明。
 
 ## 官方100回合结果
 
-以下结果使用`random` setting、官方专家可行性预检、官方成功判据和100个有效回合。“待补充”表示完整100回合结果尚未确认。
+以下结果使用`random` setting、官方专家可行性预检、官方成功判据和100个有效回合。
 
 | 任务 | 成功率 |
 |---|---|---:|---:|
