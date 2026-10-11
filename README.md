@@ -1,23 +1,23 @@
 # RoboSynChallenge First Stage
 
-第一阶段十个任务的模型适配器、评测配置、模型下载与复现说明。GitHub 仓库不包含 checkpoint 大文件；每个任务对应一个独立 Hugging Face 模型仓库，权重统一位于仓库的 `ckpt/` 子目录。
+第一阶段十个任务的模型适配器、评测配置、模型下载与复现说明。每个任务对应一个独立 Hugging Face 模型仓库，权重统一位于仓库的 `ckpt/` 子目录。
 
 ## 评测结果
 
 除特别注明外，结果使用 `random` setting、官方专家可行性预检、官方成功判据和 100 个有效回合。
 
-| 任务 | 策略 | Checkpoint | 结果 |
-|---|---|---:|---:|
-| Items Handover | π0.5 | 39999 | 72/100 (72%) |
-| Table Rearrangement | π0.5 | 70000 | 89/100 (89%) |
-| Mixer Operating | ACT | 080000 | 83/100 (83%) |
-| Item Assembly | ACT | 080000 | 78/100 (78%) |
-| Manipulate Pipette | π0.5 | 2500 | 74/100 (74%) |
-| Sample Loading | π0.5 | 4900 | 3/100 (3%) |
-| Click Bell | π0.5 | 2000 | 96/100 (96%) |
-| Dual-Arm Water Pouring | π0.5 | 2399 | 95/100 (95%) |
-| Basket Pick-and-Place | π0.5 | 800 | 80/100 (80%) |
-| Drawer Open-and-Place | π0.5 | 2999 | 90/100 (90%) |
+| 任务   | 结果 |
+|---|---:|
+| Items Handover  | 72/100 (72%) |
+| Table Rearrangement  | 89/100 (89%) |
+| Mixer Operating | 83/100 (83%) |
+| Item Assembly  | 78/100 (78%) |
+| Manipulate Pipette  | 74/100 (74%) |
+| Sample Loading  | 3/100 (3%) |
+| Click Bell | 96/100 (96%) |
+| Dual-Arm Water Pouring  | 95/100 (95%) |
+| Basket Pick-and-Place | 80/100 (80%) |
+| Drawer Open-and-Place | 90/100 (90%) |
 
 ## Hugging Face 模型命名
 
