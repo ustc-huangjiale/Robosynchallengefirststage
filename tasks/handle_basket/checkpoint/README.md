@@ -2,7 +2,7 @@
 
 - Policy: π0.5
 - Checkpoint step: 800
-- Recorded official result: pending
+- Recorded official result: 80/100 (80%)
 - Hugging Face URL: TODO
 - Revision: TODO
 - SHA256: TODO
