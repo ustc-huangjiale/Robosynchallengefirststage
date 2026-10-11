@@ -1,0 +1,12 @@
+{
+  "items_handover": "/absolute/path/to/items_handover/checkpoint",
+  "table_rearrangement": "/absolute/path/to/table_rearrangement/checkpoint",
+  "mixer_operating": "/absolute/path/to/mixer_operating/checkpoint",
+  "item_assembly": "/absolute/path/to/item_assembly/checkpoint",
+  "manipulate_pipette": "/absolute/path/to/manipulate_pipette/checkpoint",
+  "sample_loading": "/absolute/path/to/sample_loading/checkpoint",
+  "click_bell": "/absolute/path/to/click_bell/checkpoint",
+  "water_pouring": "/absolute/path/to/water_pouring/checkpoint",
+  "handle_basket": "/absolute/path/to/handle_basket/checkpoint",
+  "drawer_open_place": "/absolute/path/to/drawer_open_place/checkpoint"
+}

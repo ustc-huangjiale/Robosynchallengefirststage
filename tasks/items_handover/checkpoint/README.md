@@ -2,9 +2,14 @@
 
 - Policy: π0.5
 - Checkpoint step: 39999
-- Recorded official result: 72/100
-- Hugging Face URL: TODO
-- Revision: TODO
-- SHA256: TODO
+- Recorded evaluation result: 72/100 (72%)
+- Hugging Face repository: https://huggingface.co/ustc-huangjiale/robosynchallenge-firststage-pi05-items-handover
+- Repository checkpoint path: `ckpt/`
 
-Place the complete downloaded checkpoint in this directory. Do not commit weight files.
+Download with:
+
+```bash
+python scripts/download_checkpoint.py items_handover --namespace ustc-huangjiale
+```
+
+Do not commit downloaded weight files to GitHub.

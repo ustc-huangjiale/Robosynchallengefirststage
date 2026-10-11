@@ -1,10 +1,15 @@
 # manipulate_pipette checkpoint
 
 - Policy: π0.5
-- Checkpoint step: 2999
-- Recorded official result: pending
-- Hugging Face URL: TODO
-- Revision: TODO
-- SHA256: TODO
+- Checkpoint step: 2500
+- Recorded evaluation result: 74/100 (74%)
+- Hugging Face repository: https://huggingface.co/ustc-huangjiale/robosynchallenge-firststage-pi05-manipulate-pipette
+- Repository checkpoint path: `ckpt/`
 
-Place the complete downloaded checkpoint in this directory. Do not commit weight files.
+Download with:
+
+```bash
+python scripts/download_checkpoint.py manipulate_pipette --namespace ustc-huangjiale
+```
+
+Do not commit downloaded weight files to GitHub.

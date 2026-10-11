@@ -2,9 +2,14 @@
 
 - Policy: π0.5
 - Checkpoint step: 70000
-- Recorded official result: 89/100 (89%)
-- Hugging Face URL: TODO
-- Revision: TODO
-- SHA256: TODO
+- Recorded evaluation result: 89/100 (89%)
+- Hugging Face repository: https://huggingface.co/ustc-huangjiale/robosynchallenge-firststage-pi05-table-rearrangement
+- Repository checkpoint path: `ckpt/`
 
-Place the complete downloaded checkpoint in this directory. Do not commit weight files.
+Download with:
+
+```bash
+python scripts/download_checkpoint.py table_rearrangement --namespace ustc-huangjiale
+```
+
+Do not commit downloaded weight files to GitHub.

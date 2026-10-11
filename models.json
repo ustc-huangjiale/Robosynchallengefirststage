@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "default_namespace": "ustc-huangjiale",
+  "checkpoint_subdir": "ckpt",
+  "models": [
+    {
+      "task": "items_handover",
+      "title": "Items Handover",
+      "policy": "pi05",
+      "step": "39999",
+      "result": "72/100 (72%)",
+      "repo": "robosynchallenge-firststage-pi05-items-handover",
+      "train_config": "pi05_items_handover_release_full"
+    },
+    {
+      "task": "table_rearrangement",
+      "title": "Table Rearrangement",
+      "policy": "pi05",
+      "step": "70000",
+      "result": "89/100 (89%)",
+      "repo": "robosynchallenge-firststage-pi05-table-rearrangement",
+      "train_config": "pi05_table_rearrangement_official_strict1000_recovery295_full"
+    },
+    {
+      "task": "mixer_operating",
+      "title": "Mixer Operating",
+      "policy": "act",
+      "step": "080000",
+      "result": "83/100 (83%)",
+      "repo": "robosynchallenge-firststage-act-mixer-operating"
+    },
+    {
+      "task": "item_assembly",
+      "title": "Item Assembly",
+      "policy": "act",
+      "step": "080000",
+      "result": "78/100 (78%)",
+      "repo": "robosynchallenge-firststage-act-item-assembly"
+    },
+    {
+      "task": "manipulate_pipette",
+      "title": "Manipulate Pipette",
+      "policy": "pi05",
+      "step": "2500",
+      "result": "74/100 (74%)",
+      "repo": "robosynchallenge-firststage-pi05-manipulate-pipette",
+      "train_config": "pi05_base_robosynchallenge_manipulate_pipette_synth1200_v1"
+    },
+    {
+      "task": "sample_loading",
+      "title": "Sample Loading",
+      "policy": "pi05",
+      "step": "4900",
+      "result": "2/93 (2.2%); run stopped before episode 94 by the former 100-candidate feasibility cap; original checkpoint selection benchmark: 3/60 (5%)",
+      "repo": "robosynchallenge-firststage-pi05-sample-loading",
+      "train_config": "pi05_base_robosynchallenge_full"
+    },
+    {
+      "task": "click_bell",
+      "title": "Click Bell",
+      "policy": "pi05",
+      "step": "2000",
+      "result": "96/100 (96%)",
+      "repo": "robosynchallenge-firststage-pi05-click-bell",
+      "train_config": "pi05_base_robosynchallenge_full"
+    },
+    {
+      "task": "water_pouring",
+      "title": "Dual-Arm Water Pouring",
+      "policy": "pi05",
+      "step": "2399",
+      "result": "95/100 (95%)",
+      "repo": "robosynchallenge-firststage-pi05-water-pouring",
+      "train_config": "pi05_base_robosynchallenge_full"
+    },
+    {
+      "task": "handle_basket",
+      "title": "Basket Pick-and-Place",
+      "policy": "pi05",
+      "step": "800",
+      "result": "80/100 (80%)",
+      "repo": "robosynchallenge-firststage-pi05-handle-basket",
+      "train_config": "pi05_base_robosynchallenge_full"
+    },
+    {
+      "task": "drawer_open_place",
+      "title": "Drawer Open-and-Place",
+      "policy": "pi05",
+      "step": "2999",
+      "result": "90/100 (90%)",
+      "repo": "robosynchallenge-firststage-pi05-drawer-open-place",
+      "train_config": "pi05_base_robosynchallenge_full"
+    }
+  ]
+}

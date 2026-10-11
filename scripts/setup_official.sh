@@ -4,19 +4,66 @@ repo="${ROBOSYN_ROOT:?set ROBOSYN_ROOT to the official RoboSynChallenge checkout
 expected=8818c82df5fa2522809b8105e7018950dcc9a9a8
 actual="$(git -C "$repo" rev-parse HEAD)"
 [[ "$actual" == "$expected" ]] || { echo "expected official commit $expected, got $actual" >&2; exit 2; }
-target="$repo/robosynchallenge/tasks/manipulate_pipette/action_bank.py"
-python3 - "$target" <<'PY'
+python3 - "$repo" <<'PYCODE'
 from pathlib import Path
 import sys
-path = Path(sys.argv[1])
-source = path.read_text()
+repo = Path(sys.argv[1])
+action_bank = repo / "robosynchallenge/tasks/manipulate_pipette/action_bank.py"
+source = action_bank.read_text()
 old = "return ret.positions[0].numpy().T"
 new = "return ret.positions[0].detach().cpu().numpy().T"
-if new in source:
-    print("compatibility fix already present")
-elif source.count(old) == 1:
-    path.write_text(source.replace(old, new))
-    print("applied minimal CUDA tensor-to-NumPy compatibility fix")
+if new not in source:
+    if source.count(old) != 1:
+        raise SystemExit("official Pipette action_bank differs; refusing to modify it")
+    action_bank.write_text(source.replace(old, new))
+    print("applied Pipette CUDA tensor-to-NumPy compatibility fix")
 else:
-    raise SystemExit("official source differs; refusing to modify it")
-PY
+    print("Pipette compatibility fix already present")
+
+# The submitted checkpoint was trained with this instruction. Keep the
+# simulator and success predicate official; only align the language input.
+gym_config = repo / "configs/manipulate_pipette/random/gym_config.json"
+source = gym_config.read_text()
+old_instruction = "Use the pipette on the table to transfer liquid from one beaker to another"
+new_instruction = "Hold the pipette over the beaker with the right gripper and press its plunger once with the left gripper."
+if new_instruction not in source:
+    if source.count(old_instruction) != 1:
+        raise SystemExit("official Pipette instruction differs; refusing to modify it")
+    gym_config.write_text(source.replace(old_instruction, new_instruction))
+    print("aligned the Pipette language instruction with checkpoint training")
+else:
+    print("Pipette language instruction already aligned")
+
+evaluator = repo / "scripts/eval_policy.py"
+source = evaluator.read_text()
+old_config = '''    if expert_check:
+        max_seed_attempts_per_episode = int(
+            config.get("eval_max_seed_attempts_per_episodes", 100)
+        )
+        if max_seed_attempts_per_episode < 1:
+            raise ValueError(
+                "eval_max_seed_attempts_per_episodes must be greater than zero."
+            )
+'''
+new_config = '''    if expert_check:
+        # Keep sampling candidate seeds until the expert feasibility check passes.
+        max_seed_attempts_per_episode = None
+'''
+if old_config in source:
+    source = source.replace(old_config, new_config)
+    source = source.replace('''            " (max candidate seeds per episode: "
+            f"{max_seed_attempts_per_episode})"
+''', '''            " (candidate seeds per episode: unlimited)"
+''')
+    start = source.index("            if current_episode_seed_attempts >= max_seed_attempts_per_episode:")
+    end = source.index("            ep_seed = (", start)
+    source = source[:start] + source[end:]
+    source = source.replace('f" Expert Feasibility Check Attempt {current_episode_seed_attempts}/"\n                        f"{max_seed_attempts_per_episode} "', 'f" Expert Feasibility Check Attempt {current_episode_seed_attempts} "')
+    source = source.replace('f" Expert Feasibility Check Attempt {current_episode_seed_attempts}/"\n                    f"{max_seed_attempts_per_episode} "', 'f" Expert Feasibility Check Attempt {current_episode_seed_attempts} "')
+    evaluator.write_text(source)
+    print("removed the per-episode candidate-seed limit")
+elif "candidate seeds per episode: unlimited" in source:
+    print("candidate-seed limit already removed")
+else:
+    raise SystemExit("official evaluator differs; refusing to modify it")
+PYCODE

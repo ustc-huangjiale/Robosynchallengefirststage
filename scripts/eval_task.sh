@@ -11,7 +11,7 @@ embodichain_root="${EMBODICHAIN_ROOT:-$(cd "$robosyn_root/.." && pwd)/EmbodiChai
 result_dir="$submission_root/eval_results/$task"
 [[ -f "$robosyn_root/scripts/eval_policy.py" ]] || { echo "invalid ROBOSYN_ROOT: $robosyn_root" >&2; exit 2; }
 [[ -d "$embodichain_root/embodichain" ]] || { echo "invalid EMBODICHAIN_ROOT: $embodichain_root" >&2; exit 2; }
-if [[ ! -e "$checkpoint/params" && ! -e "$checkpoint/config.json" && ! -e "$checkpoint/pretrained_model/config.json" ]]; then echo "checkpoint is empty: $checkpoint" >&2; exit 2; fi
+if [[ ! -e "$checkpoint/params" && ! -e "$checkpoint/model.safetensors" && ! -e "$checkpoint/config.json" && ! -e "$checkpoint/pretrained_model/config.json" ]]; then echo "checkpoint is empty: $checkpoint" >&2; exit 2; fi
 policy_name="$(python3 -c 'import sys,yaml; print(yaml.safe_load(open(sys.argv[1]))["policy_name"])' "$config")"
 adapter_dir="$robosyn_root/policy/$policy_name"
 source_dir="$submission_root/submission/policy_packages/$policy_name"

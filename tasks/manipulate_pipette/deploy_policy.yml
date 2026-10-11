@@ -11,7 +11,7 @@ renderer: hybrid
 filter_dataset_saving: true
 eval_video_log: false
 checkpoint_path: null
-train_config_name: pi05_base_robosynchallenge_full
+train_config_name: pi05_base_robosynchallenge_manipulate_pipette_synth1200_v1
 model_name: manipulate_pipette
-checkpoint_id: 2999
+checkpoint_id: 2500
 pi0_step: 10
