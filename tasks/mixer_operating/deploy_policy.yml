@@ -1,0 +1,22 @@
+policy_name: firststage_act
+task_name: mixer_operating
+setting: random
+seed: 0
+max_episodes: 100
+max_steps: 500
+eval_expert_check: true
+headless: true
+pytorch_device: cuda:0
+renderer: hybrid
+filter_dataset_saving: true
+eval_video_log: false
+checkpoint_path: null
+model_name: mixer_operating
+act_step: 10
+state_obs_path: robot/qpos
+strict_action_dim: true
+eval_reset_sync_steps: 1
+image_key_map:
+  observation.images.cam_high: cam_high
+  observation.images.cam_right_wrist: cam_right_wrist
+  observation.images.cam_left_wrist: cam_left_wrist

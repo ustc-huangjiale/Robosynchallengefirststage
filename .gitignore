@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.venv/
+eval_results/
+*.log
+tasks/*/checkpoint/*
+!tasks/*/checkpoint/README.md
+*.ckpt
+*.safetensors
+*.pt
+*.pth
+*.bin
+params/
+assets/
