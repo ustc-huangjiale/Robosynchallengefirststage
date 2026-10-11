@@ -11,7 +11,7 @@ renderer: hybrid
 filter_dataset_saving: true
 eval_video_log: false
 checkpoint_path: null
-train_config_name: pi05_base_robosynchallenge_full
+train_config_name: pi05_drawer_open_place_stage2_v1
 model_name: drawer_open_place
 checkpoint_id: 2999
 pi0_step: 10

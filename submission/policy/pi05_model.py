@@ -14,22 +14,47 @@ from openpi.policies import policy_config
 from openpi.training import config as training_config
 
 
+_TASK_REPO_IDS = {
+    "pi05_items_handover_release_full":
+        "RoboSynChallenge/cobotmagic_Sim_items_handover_release_random1000",
+    "pi05_table_rearrangement_official_strict1000_recovery295_full":
+        "RoboSynChallenge/cobotmagic_Sim_table_rearrangement_official_strict1000_recovery295",
+    "pi05_base_robosynchallenge_manipulate_pipette_synth1200_v1":
+        "RoboSynChallenge/cobotmagic_Sim_manipulate_pipette_merged1356_v21",
+    "pi05_sample_loading_official8818_best":
+        "RoboSynChallenge/cobotmagic_Sim_sample_loading",
+    "pi05_click_bell_multisource_v1":
+        "RoboSynChallenge/cobotmagic_Sim_click_bell_multisource_v1",
+    "pi05_water_pouring_official1k_v2":
+        "RoboSynChallenge/cobotmagic_Sim_water_pouring",
+    "pi05_handle_basket_reachability_v2":
+        "RoboSynChallenge/cobotmagic_Sim_handle_basket_reachability_balanced_v2",
+    "pi05_drawer_open_place_stage2_v1":
+        "RoboSynChallenge/cobotmagic_Sim_drawer_open_place_stage2_v1",
+}
+
+
 def _get_config(name):
-    """Build every inference transform as part of the model configuration."""
-    if name != "pi05_table_rearrangement_official_strict1000_recovery295_full":
+    """Build task-specific inference transforms without local symlink aliases."""
+    repo_id = _TASK_REPO_IDS.get(name)
+    if repo_id is None:
         return training_config.get_config(name)
+    data_kwargs = {}
+    if name == "pi05_table_rearrangement_official_strict1000_recovery295_full":
+        data_kwargs.update(
+            gripper_action_input_scale=20.0,
+            gripper_action_output_scale=0.05,
+        )
     return training_config.TrainConfig(
         name=name,
         model=pi0_config.Pi0Config(pi05=True, action_horizon=50),
         data=training_config.LeRobotEmbodiChainDataConfig(
-            repo_id="RoboSynChallenge/cobotmagic_Sim_table_rearrangement_official_strict1000_recovery295",
+            repo_id=repo_id,
             base_config=training_config.DataConfig(prompt_from_task=True),
             extra_delta_transform=True,
-            gripper_action_input_scale=20.0,
-            gripper_action_output_scale=0.05,
+            **data_kwargs,
         ),
     )
-
 
 class PI05:
     def __init__(

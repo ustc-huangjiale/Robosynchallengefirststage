@@ -11,7 +11,7 @@ renderer: hybrid
 filter_dataset_saving: true
 eval_video_log: false
 checkpoint_path: null
-train_config_name: pi05_base_robosynchallenge_full
+train_config_name: pi05_sample_loading_official8818_best
 model_name: sample_loading
 checkpoint_id: 4900
 pi0_step: 10

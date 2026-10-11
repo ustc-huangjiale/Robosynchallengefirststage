@@ -11,7 +11,7 @@ renderer: hybrid
 filter_dataset_saving: true
 eval_video_log: false
 checkpoint_path: null
-train_config_name: pi05_base_robosynchallenge_full
+train_config_name: pi05_water_pouring_official1k_v2
 model_name: water_pouring
 checkpoint_id: 2399
 pi0_step: 10

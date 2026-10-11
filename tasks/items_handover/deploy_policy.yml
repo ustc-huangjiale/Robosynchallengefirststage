@@ -11,7 +11,7 @@ renderer: hybrid
 filter_dataset_saving: true
 eval_video_log: false
 checkpoint_path: null
-train_config_name: pi05_base_robosynchallenge_full
+train_config_name: pi05_items_handover_release_full
 model_name: items_handover
 checkpoint_id: 39999
 pi0_step: 10

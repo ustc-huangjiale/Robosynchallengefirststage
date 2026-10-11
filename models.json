@@ -53,7 +53,7 @@
       "step": "4900",
       "result": "3/100 (3%)",
       "repo": "robosynchallenge-firststage-pi05-sample-loading",
-      "train_config": "pi05_base_robosynchallenge_full"
+      "train_config": "pi05_sample_loading_official8818_best"
     },
     {
       "task": "click_bell",
@@ -62,7 +62,7 @@
       "step": "2000",
       "result": "96/100 (96%)",
       "repo": "robosynchallenge-firststage-pi05-click-bell",
-      "train_config": "pi05_base_robosynchallenge_full"
+      "train_config": "pi05_click_bell_multisource_v1"
     },
     {
       "task": "water_pouring",
@@ -71,7 +71,7 @@
       "step": "2399",
       "result": "95/100 (95%)",
       "repo": "robosynchallenge-firststage-pi05-water-pouring",
-      "train_config": "pi05_base_robosynchallenge_full"
+      "train_config": "pi05_water_pouring_official1k_v2"
     },
     {
       "task": "handle_basket",
@@ -80,7 +80,7 @@
       "step": "800",
       "result": "80/100 (80%)",
       "repo": "robosynchallenge-firststage-pi05-handle-basket",
-      "train_config": "pi05_base_robosynchallenge_full"
+      "train_config": "pi05_handle_basket_reachability_v2"
     },
     {
       "task": "drawer_open_place",
@@ -89,7 +89,7 @@
       "step": "2999",
       "result": "90/100 (90%)",
       "repo": "robosynchallenge-firststage-pi05-drawer-open-place",
-      "train_config": "pi05_base_robosynchallenge_full"
+      "train_config": "pi05_drawer_open_place_stage2_v1"
     }
   ]
 }
