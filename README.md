@@ -37,7 +37,7 @@ python scripts/download_checkpoint.py --all \
   --namespace ustc-huangjiale
 ```
 
-下载内容会写入 `tasks/<task>/checkpoint/`，不会加入 Git。
+下载内容会写入 `tasks/<task>/checkpoint/`。
 
 ## 安装
 
@@ -75,4 +75,4 @@ bash tasks/handle_basket/eval.sh
 bash tasks/drawer_open_place/eval.sh
 ```
 
-每个配置默认 100 回合、`random` setting、官方专家可行性预检、无视频。额外参数会作为官方 evaluator override 透传。正式复现请勿修改 setting、seed 流、成功判据或回合数。
+每个配置默认 100 回合、`random` setting、官方专家可行性预检、无视频。
