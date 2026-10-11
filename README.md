@@ -7,7 +7,7 @@
 以下结果使用`random` setting、官方专家可行性预检、官方成功判据和100个有效回合。
 
 | 任务 | 成功率 |
-|---|---|---:|---:|
+|---|---:|
 | Items Handover | 72% (72/100) |
 | Table Rearrangement | 44% (44/100) |
 | Mixer Operating | 83% (83/100) |
