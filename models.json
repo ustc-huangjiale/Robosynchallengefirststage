@@ -51,7 +51,7 @@
       "title": "Sample Loading",
       "policy": "pi05",
       "step": "4900",
-      "result": "2/93 (2.2%); run stopped before episode 94 by the former 100-candidate feasibility cap; original checkpoint selection benchmark: 3/60 (5%)",
+      "result": "3/100 (3%)",
       "repo": "robosynchallenge-firststage-pi05-sample-loading",
       "train_config": "pi05_base_robosynchallenge_full"
     },

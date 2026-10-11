@@ -13,13 +13,11 @@
 | Mixer Operating | ACT | 080000 | 83/100 (83%) |
 | Item Assembly | ACT | 080000 | 78/100 (78%) |
 | Manipulate Pipette | π0.5 | 2500 | 74/100 (74%) |
-| Sample Loading | π0.5 | 4900 | 2/93 (2.2%)* |
+| Sample Loading | π0.5 | 4900 | 3/100 (3%) |
 | Click Bell | π0.5 | 2000 | 96/100 (96%) |
 | Dual-Arm Water Pouring | π0.5 | 2399 | 95/100 (95%) |
 | Basket Pick-and-Place | π0.5 | 800 | 80/100 (80%) |
 | Drawer Open-and-Place | π0.5 | 2999 | 90/100 (90%) |
-
-\* Sample Loading 的本次运行在第 94 回合前因旧版“每回合最多 100 个候选 seed”限制中止，因此不是完整 100 回合结果；已完成的 93 回合中成功 2 次。CBZ 交付清单记录的 checkpoint 选择基准为 3/60（5%）。仓库安装脚本现已将可行 seed 搜索改为无限重试，后续不会因该上限中止。
 
 ## Hugging Face 模型命名
 
