@@ -17,6 +17,8 @@ from openpi.training import config as training_config
 _TASK_REPO_IDS = {
     "pi05_items_handover_release_full":
         "RoboSynChallenge/cobotmagic_Sim_items_handover_release_random1000",
+    "pi05_items_handover_release_handover46_v9_full":
+        "RoboSynChallenge/cobotmagic_Sim_items_handover_release_handover46_v9_exact_left40_right60_insert50_random1000",
     "pi05_table_rearrangement_official_strict1000_recovery295_full":
         "RoboSynChallenge/cobotmagic_Sim_table_rearrangement_official_strict1000_recovery295",
     "pi05_base_robosynchallenge_manipulate_pipette_synth1200_v1":

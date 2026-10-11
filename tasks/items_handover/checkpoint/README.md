@@ -2,7 +2,7 @@
 
 - Policy: π0.5
 - Checkpoint step: 39999
-- Recorded evaluation result: 73/100 (73%)
+- Recorded evaluation result: 72/100 (72%)
 - Hugging Face repository: https://huggingface.co/ustc-huangjiale/robosynchallenge-firststage-pi05-items-handover
 - Repository checkpoint path: `ckpt/`
 
