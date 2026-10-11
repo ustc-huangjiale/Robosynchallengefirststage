@@ -62,6 +62,7 @@ class PI05:
         train_config_name,
         checkpoint_path,
         pi0_step,
+        instruction_override=None,
         denormalize_eef_action=False,
     ):
         config = _get_config(train_config_name)
@@ -74,6 +75,7 @@ class PI05:
             )
         self.policy = policy_config.create_trained_policy(config, checkpoint_path)
         self.pi0_step = int(pi0_step)
+        self.instruction_override = instruction_override
         self.denormalize_eef_action = bool(denormalize_eef_action)
         self.observation_window = None
         self.pytorch_device = None
@@ -99,7 +101,7 @@ class PI05:
         self._action_high = np.asarray(space.high, dtype=np.float32).reshape(-1)
 
     def set_language(self, instruction):
-        self.instruction = instruction
+        self.instruction = self.instruction_override or instruction
 
     def update_observation_window(self, images, state):
         front, right, left = images

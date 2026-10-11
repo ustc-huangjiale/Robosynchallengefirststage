@@ -14,4 +14,4 @@ checkpoint_path: null
 train_config_name: pi05_sample_loading_official8818_best
 model_name: sample_loading
 checkpoint_id: 4900
-pi0_step: 10
+pi0_step: 50

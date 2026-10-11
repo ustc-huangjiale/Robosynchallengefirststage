@@ -8,7 +8,7 @@
       "title": "Items Handover",
       "policy": "pi05",
       "step": "39999",
-      "result": "72/100 (72%)",
+      "result": "73/100 (73%)",
       "repo": "robosynchallenge-firststage-pi05-items-handover",
       "train_config": "pi05_items_handover_release_full"
     },
@@ -16,7 +16,7 @@
       "task": "table_rearrangement",
       "title": "Table Rearrangement",
       "policy": "pi05",
-      "step": "70000",
+      "step": "60000",
       "result": "89/100 (89%)",
       "repo": "robosynchallenge-firststage-pi05-table-rearrangement",
       "train_config": "pi05_table_rearrangement_official_strict1000_recovery295_full"

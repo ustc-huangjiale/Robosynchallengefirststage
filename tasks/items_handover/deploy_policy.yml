@@ -1,10 +1,10 @@
 policy_name: firststage_pi05
 task_name: items_handover
 setting: random
-seed: 0
+seed: 500
 max_episodes: 100
-max_steps: 350
-eval_expert_check: true
+max_steps: 300
+eval_expert_check: false
 headless: true
 pytorch_device: cuda:0
 renderer: hybrid
@@ -15,3 +15,5 @@ train_config_name: pi05_items_handover_release_full
 model_name: items_handover
 checkpoint_id: 39999
 pi0_step: 10
+denormalize_eef_action: true
+instruction_override: Pick up the pen, hand it over to the other arm, place it into the pen holder, and finish with both grippers open.

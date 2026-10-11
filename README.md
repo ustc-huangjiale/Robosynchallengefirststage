@@ -8,7 +8,7 @@
 
 | 任务   | 结果 |
 |---|---:|
-| Items Handover  | 72/100 (72%) |
+| Items Handover  | 73/100 (73%) |
 | Table Rearrangement  | 89/100 (89%) |
 | Mixer Operating | 83/100 (83%) |
 | Item Assembly  | 78/100 (78%) |

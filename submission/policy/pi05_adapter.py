@@ -23,6 +23,7 @@ def get_model(args):
         args["train_config_name"],
         checkpoint,
         int(args.get("pi0_step", 10)),
+        instruction_override=args.get("instruction_override"),
         denormalize_eef_action=bool(
             args.get("denormalize_eef_action", False)
         ),
