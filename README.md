@@ -17,7 +17,7 @@
 | Click Bell| 96% (96/100)|
 | Dual-Arm Water Pouring | 95% (95/100) |
 | Basket Pick-and-Place | 待补充 |
-| Drawer Open-and-Place | 待补充 |
+| Drawer Open-and-Place | 90% (90/100) |
 
 ## 安装
 
