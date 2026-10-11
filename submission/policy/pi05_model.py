@@ -65,6 +65,7 @@ class PI05:
         checkpoint_path,
         pi0_step,
         instruction_override=None,
+        clip_actions=False,
         denormalize_eef_action=False,
     ):
         config = _get_config(train_config_name)
@@ -78,6 +79,7 @@ class PI05:
         self.policy = policy_config.create_trained_policy(config, checkpoint_path)
         self.pi0_step = int(pi0_step)
         self.instruction_override = instruction_override
+        self.clip_actions = bool(clip_actions)
         self.denormalize_eef_action = bool(denormalize_eef_action)
         self.observation_window = None
         self.pytorch_device = None
@@ -87,7 +89,7 @@ class PI05:
 
     def configure_environment(self, env):
         """Capture output-space metadata once; all mapping remains model-owned."""
-        if not self.denormalize_eef_action or self._eef_indices is not None:
+        if (not self.denormalize_eef_action and not self.clip_actions) or self._action_low is not None:
             return
         base = env.unwrapped
         active_ids = list(base.active_joint_ids)
@@ -117,14 +119,17 @@ class PI05:
 
     def _postprocess_actions(self, actions):
         values = np.asarray(actions, dtype=np.float32).copy()
-        if not self.denormalize_eef_action:
+        if self._action_low is None:
+            if self.denormalize_eef_action or self.clip_actions:
+                raise RuntimeError("configure_environment() must run before inference")
             return values
-        if self._eef_indices is None:
-            raise RuntimeError("configure_environment() must run before inference")
-        for index in self._eef_indices:
-            values[..., index] = self._action_low[index] + np.clip(
-                values[..., index], 0.0, 1.0
-            ) * (self._action_high[index] - self._action_low[index])
+        if self.denormalize_eef_action:
+            for index in self._eef_indices:
+                values[..., index] = self._action_low[index] + np.clip(
+                    values[..., index], 0.0, 1.0
+                ) * (self._action_high[index] - self._action_low[index])
+        if self.clip_actions:
+            values = np.clip(values, self._action_low, self._action_high)
         return values
 
     def get_action(self):

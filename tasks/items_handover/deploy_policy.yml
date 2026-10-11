@@ -15,3 +15,4 @@ train_config_name: pi05_items_handover_release_handover46_v9_full
 model_name: items_handover
 checkpoint_id: 39999
 pi0_step: 50
+clip_actions: true

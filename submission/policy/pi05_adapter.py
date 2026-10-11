@@ -24,6 +24,7 @@ def get_model(args):
         checkpoint,
         int(args.get("pi0_step", 10)),
         instruction_override=args.get("instruction_override"),
+        clip_actions=bool(args.get("clip_actions", False)),
         denormalize_eef_action=bool(
             args.get("denormalize_eef_action", False)
         ),
