@@ -9,7 +9,7 @@
 | 任务 | 成功率 |
 |---|---:|
 | Items Handover | 72% (72/100) |
-| Table Rearrangement | 44% (44/100) |
+| Table Rearrangement | 89% (89/100) |
 | Mixer Operating | 83% (83/100) |
 | Item Assembly | 78% (78/100) |
 | Manipulate Pipette | 待补充 |
