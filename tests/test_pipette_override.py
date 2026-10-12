@@ -41,4 +41,7 @@ def test_setup_installs_only_known_pipette_versions():
     source = SETUP.read_text()
     assert EXPECTED_SHA256 in source
     assert "official_pipette_sha256" in source
+    assert 'ROBOSYN_PIPETTE_TASK_MODE:-latched' in source
+    assert 'pipette_task_mode == "latched"' in source
+    assert 'pipette_task_mode == "official"' in source
     assert "refusing to replace an unknown implementation" in source

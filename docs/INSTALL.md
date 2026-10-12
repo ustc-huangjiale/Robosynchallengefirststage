@@ -5,7 +5,7 @@ This repository is a lightweight submission overlay for the official RoboSynChal
 1. Install the complete NVIDIA driver, including Vulkan and `libnvoptix.so.1`, and Git LFS. Ensure that the evaluation user belongs to the `render` and `video` device groups. Install the verified `uv 0.13.0` release with the command below.
 2. Clone EmbodiChain and pin it to the exact commit `89c14da8d0221dc4ee2a4a3e0ba1078b16d447bd` used by the official `v0.2.4.post1` release. Do not use the moving `main` branch.
 3. Clone RoboSynChallenge and pin it to commit `8818c82df5fa2522809b8105e7018950dcc9a9a8`.
-4. Set `ROBOSYN_ROOT` and `EMBODICHAIN_ROOT`, then run `bash scripts/setup_official.sh` before installing dependencies. The script aligns PI0.5 with dexsim 0.4.3 as required by EmbodiChain, pins a pymeshlab build compatible with Ubuntu 20.04 and glibc 2.31, and lets DexSim establish the single-GPU CUDA context before Torch or JAX. It does not modify any success criteria.
+4. Set `ROBOSYN_ROOT` and `EMBODICHAIN_ROOT`, then run `bash scripts/setup_official.sh` before installing dependencies. The script aligns PI0.5 with dexsim 0.4.3 as required by EmbodiChain, pins a pymeshlab build compatible with Ubuntu 20.04 and glibc 2.31, and lets DexSim establish the single-GPU CUDA context before Torch or JAX. `ROBOSYN_PIPETTE_TASK_MODE=latched` (the default) installs the per-control-step press-event latch used by the verified Pipette evaluation without changing its success predicate; `ROBOSYN_PIPETTE_TASK_MODE=official` retains the pinned official task implementation for organizer review.
 5. Run `uv sync` in the RoboSynChallenge root, then run it separately in `policy/pi05` and `policy/act`.
 6. Run `python scripts/download_runtime_assets.py` to download and verify the OpenPI PaliGemma tokenizer over HTTPS. This avoids a direct gcsfs connection to Google Storage during evaluation.
 7. Download the models from Hugging Face into `tasks/<task>/checkpoint/`.
@@ -21,7 +21,7 @@ git clone https://github.com/ustc-huangjiale/Robosynchallengefirststage.git
 export ROBOSYN_ROOT=/absolute/path/to/RoboSynChallenge
 export EMBODICHAIN_ROOT=/absolute/path/to/EmbodiChain
 cd Robosynchallengefirststage
-bash scripts/setup_official.sh
+ROBOSYN_PIPETTE_TASK_MODE=latched bash scripts/setup_official.sh
 python scripts/download_runtime_assets.py
 cd "$ROBOSYN_ROOT"
 GIT_LFS_SKIP_SMUDGE=1 uv sync

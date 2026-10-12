@@ -3,15 +3,21 @@ set -euo pipefail
 repo="${ROBOSYN_ROOT:?set ROBOSYN_ROOT to the official RoboSynChallenge checkout}"
 embodichain_repo="${EMBODICHAIN_ROOT:?set EMBODICHAIN_ROOT to the EmbodiChain checkout}"
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+pipette_task_mode="${ROBOSYN_PIPETTE_TASK_MODE:-latched}"
+[[ "$pipette_task_mode" == "latched" || "$pipette_task_mode" == "official" ]] || {
+  echo "ROBOSYN_PIPETTE_TASK_MODE must be 'latched' or 'official'" >&2
+  exit 2
+}
 expected=8818c82df5fa2522809b8105e7018950dcc9a9a8
 expected_embodichain=89c14da8d0221dc4ee2a4a3e0ba1078b16d447bd
 actual="$(git -C "$repo" rev-parse HEAD)"
 actual_embodichain="$(git -C "$embodichain_repo" rev-parse HEAD)"
 [[ "$actual" == "$expected" ]] || { echo "expected official commit $expected, got $actual" >&2; exit 2; }
 [[ "$actual_embodichain" == "$expected_embodichain" ]] || { echo "expected EmbodiChain commit $expected_embodichain, got $actual_embodichain" >&2; exit 2; }
-python3 - "$repo" "$embodichain_repo" "$script_dir/official_overrides/manipulate_pipette.py" <<'PYCODE'
+python3 - "$repo" "$embodichain_repo" "$script_dir/official_overrides/manipulate_pipette.py" "$pipette_task_mode" <<'PYCODE'
 from pathlib import Path
 import hashlib
+import subprocess
 import sys
 repo = Path(sys.argv[1])
 
@@ -87,16 +93,38 @@ def sha256(path):
 
 if sha256(pipette_override) != latched_pipette_sha256:
     raise SystemExit("bundled Pipette state-latching override failed integrity check")
+pipette_task_mode = sys.argv[4]
 current_pipette_sha256 = sha256(pipette_task)
-if current_pipette_sha256 == latched_pipette_sha256:
-    print("Pipette per-control-step state latching already applied")
-elif current_pipette_sha256 == official_pipette_sha256:
-    pipette_task.write_bytes(pipette_override.read_bytes())
-    print("applied Pipette per-control-step state latching")
+if pipette_task_mode == "latched":
+    if current_pipette_sha256 == latched_pipette_sha256:
+        print("Pipette task mode: latched (already applied)")
+    elif current_pipette_sha256 == official_pipette_sha256:
+        pipette_task.write_bytes(pipette_override.read_bytes())
+        print("Pipette task mode: latched (applied verified per-control-step state latching)")
+    else:
+        raise SystemExit(
+            "official Pipette task differs; refusing to replace an unknown implementation"
+        )
+elif pipette_task_mode == "official":
+    if current_pipette_sha256 == official_pipette_sha256:
+        print("Pipette task mode: official (left unchanged)")
+    elif current_pipette_sha256 == latched_pipette_sha256:
+        relative_path = "robosynchallenge/tasks/manipulate_pipette/manipulate_pipette.py"
+        official_source = subprocess.run(
+            ["git", "-C", str(repo), "show", f"HEAD:{relative_path}"],
+            check=True,
+            stdout=subprocess.PIPE,
+        ).stdout
+        if hashlib.sha256(official_source).hexdigest() != official_pipette_sha256:
+            raise SystemExit("pinned official Pipette task failed integrity check")
+        pipette_task.write_bytes(official_source)
+        print("Pipette task mode: official (restored pinned official implementation)")
+    else:
+        raise SystemExit(
+            "official Pipette task differs; refusing to restore an unknown implementation"
+        )
 else:
-    raise SystemExit(
-        "official Pipette task differs; refusing to replace an unknown implementation"
-    )
+    raise SystemExit(f"unsupported Pipette task mode: {pipette_task_mode}")
 
 # Language input now comes from each task's instruction_override in
 # tasks/<task>/deploy_policy.yml, so the official gym_config.json files stay
