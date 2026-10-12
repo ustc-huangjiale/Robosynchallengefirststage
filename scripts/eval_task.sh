@@ -25,6 +25,20 @@ if ! "$python_bin" -c 'import ctypes; ctypes.CDLL("libnvoptix.so.1")' >/dev/null
   echo "NVIDIA OptiX runtime not found: libnvoptix.so.1 (install the complete NVIDIA userspace driver)" >&2
   exit 2
 fi
+render_nodes=(/dev/dri/renderD*)
+if [[ -e "${render_nodes[0]}" ]]; then
+  render_access=false
+  for node in "${render_nodes[@]}"; do
+    if [[ -r "$node" && -w "$node" ]]; then
+      render_access=true
+      break
+    fi
+  done
+  if [[ "$render_access" != true ]]; then
+    echo "no read/write access to /dev/dri/renderD* (add the user to the render group and start a new login session)" >&2
+    exit 2
+  fi
+fi
 cd "$robosyn_root"
 gpu_id="${ROBOSYN_GPU_ID:-0}"
 policy_gpu_id="${ROBOSYN_POLICY_GPU_ID:-$gpu_id}"
