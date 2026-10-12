@@ -32,4 +32,4 @@ uv run --python 3.11 --with huggingface_hub python scripts/download_checkpoint.p
 bash tasks/click_bell/eval.sh --max_episodes 1
 ```
 
-Evaluation uses physical GPU 0 by default. Checkpoints must not be committed to GitHub.
+Evaluation uses physical GPU 0 by default. 
