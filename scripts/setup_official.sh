@@ -2,14 +2,16 @@
 set -euo pipefail
 repo="${ROBOSYN_ROOT:?set ROBOSYN_ROOT to the official RoboSynChallenge checkout}"
 embodichain_repo="${EMBODICHAIN_ROOT:?set EMBODICHAIN_ROOT to the EmbodiChain checkout}"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 expected=8818c82df5fa2522809b8105e7018950dcc9a9a8
 expected_embodichain=89c14da8d0221dc4ee2a4a3e0ba1078b16d447bd
 actual="$(git -C "$repo" rev-parse HEAD)"
 actual_embodichain="$(git -C "$embodichain_repo" rev-parse HEAD)"
 [[ "$actual" == "$expected" ]] || { echo "expected official commit $expected, got $actual" >&2; exit 2; }
 [[ "$actual_embodichain" == "$expected_embodichain" ]] || { echo "expected EmbodiChain commit $expected_embodichain, got $actual_embodichain" >&2; exit 2; }
-python3 - "$repo" "$embodichain_repo" <<'PYCODE'
+python3 - "$repo" "$embodichain_repo" "$script_dir/official_overrides/manipulate_pipette.py" <<'PYCODE'
 from pathlib import Path
+import hashlib
 import sys
 repo = Path(sys.argv[1])
 
@@ -67,6 +69,34 @@ if new not in source:
     print("applied Pipette CUDA tensor-to-NumPy compatibility fix")
 else:
     print("Pipette compatibility fix already present")
+
+# Use the state-update implementation from the verified 72/100 evaluation.
+# The released predicate remains unchanged: one plunger press while both the
+# pipette and beaker are upright. This override only makes event observation
+# deterministic by latching transitions at every physical control step and by
+# clearing that state at the proper episode boundary.
+pipette_task = repo / "robosynchallenge/tasks/manipulate_pipette/manipulate_pipette.py"
+pipette_override = Path(sys.argv[3])
+official_pipette_sha256 = "5017b228c3a6c697177a1dc9939105d7b9501638faed95aeab393479a87bd664"
+latched_pipette_sha256 = "8d40cec29db0b089dc48bb5f9914a2f65c42feffb91ab9c4e2cc725705475b00"
+
+
+def sha256(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+if sha256(pipette_override) != latched_pipette_sha256:
+    raise SystemExit("bundled Pipette state-latching override failed integrity check")
+current_pipette_sha256 = sha256(pipette_task)
+if current_pipette_sha256 == latched_pipette_sha256:
+    print("Pipette per-control-step state latching already applied")
+elif current_pipette_sha256 == official_pipette_sha256:
+    pipette_task.write_bytes(pipette_override.read_bytes())
+    print("applied Pipette per-control-step state latching")
+else:
+    raise SystemExit(
+        "official Pipette task differs; refusing to replace an unknown implementation"
+    )
 
 # Language input now comes from each task's instruction_override in
 # tasks/<task>/deploy_policy.yml, so the official gym_config.json files stay
