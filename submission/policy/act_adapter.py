@@ -14,14 +14,11 @@ def get_model(args):
     if not os.path.isfile(os.path.join(str(checkpoint), "config.json")) and os.path.isfile(os.path.join(nested, "config.json")):
         checkpoint = nested
     device = args.get("pytorch_device", "cuda:0")
-    overrides = [f"--device={device}"]
-    try:
-        model = ACTPolicy.from_pretrained(checkpoint, cli_overrides=overrides)
-    except TypeError as exc:
-        if "cli_overrides" not in str(exc):
-            raise
-        config = PreTrainedConfig.from_pretrained(checkpoint, cli_overrides=overrides)
-        model = ACTPolicy.from_pretrained(checkpoint, config=config)
+    # This LeRobot version validates device types but loads indexed CUDA devices.
+    overrides = [f"--device={torch.device(device).type}"]
+    config = PreTrainedConfig.from_pretrained(checkpoint, cli_overrides=overrides)
+    config.device = device
+    model = ACTPolicy.from_pretrained(checkpoint, config=config)
     model.eval()
     model.act_device = next(model.parameters()).device
     model.act_step = int(args.get("act_step", 10))
