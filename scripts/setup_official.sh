@@ -25,11 +25,19 @@ def replace_once(path, old, new, already_present, description):
     print(f"applied {description}")
 
 
-# Keep the official PI0.5 dexsim 0.4.1 runtime while overriding the newer
-# EmbodiChain metadata, and retain the Ubuntu 20.04-compatible pymeshlab wheel.
+# Align PI0.5 with EmbodiChain v0.2.4.post1 and retain the Ubuntu
+# 20.04-compatible pymeshlab wheel.
 pi05_project = repo / "policy/pi05/pyproject.toml"
-replace_once(pi05_project, "    \"dexsim-engine==0.4.3\",", "    \"dexsim-engine==0.4.1\",", "    \"dexsim-engine==0.4.1\",", "PI0.5 official dexsim 0.4.1 pin")
-replace_once(pi05_project, "override-dependencies = [\n", "override-dependencies = [\n    \"dexsim-engine==0.4.1\",\n", "override-dependencies = [\n    \"dexsim-engine==0.4.1\",\n", "PI0.5 EmbodiChain dexsim metadata override")
+replace_once(pi05_project, "    \"dexsim-engine==0.4.1\",", "    \"dexsim-engine==0.4.3\",", "    \"dexsim-engine==0.4.3\",", "PI0.5 dexsim 0.4.3 compatibility pin")
+source = pi05_project.read_text()
+override = "override-dependencies = [\n    \"dexsim-engine==0.4.1\",\n"
+if override in source:
+    pi05_project.write_text(source.replace(override, "override-dependencies = [\n"))
+    print("removed obsolete PI0.5 dexsim metadata override")
+elif "override-dependencies = [\n" in source:
+    print("obsolete PI0.5 dexsim metadata override already absent")
+else:
+    raise SystemExit("PI0.5 override-dependencies section differs")
 replace_once(pi05_project, "    \"av==15.1.0\"\n]", "    \"av==15.1.0\",\n    \"pymeshlab==2023.12.post3\"\n]", "    \"pymeshlab==2023.12.post3\"", "PI0.5 Ubuntu 20.04 pymeshlab pin")
 act_project = repo / "policy/act/pyproject.toml"
 replace_once(act_project, "    \"av>=14.2.0\",\n    \"dexsim-engine==0.4.3\",\n]", "    \"av>=14.2.0\",\n    \"dexsim-engine==0.4.3\",\n    \"pymeshlab==2023.12.post3\",\n]", "    \"pymeshlab==2023.12.post3\",", "ACT Ubuntu 20.04 pymeshlab pin")
@@ -62,6 +70,19 @@ else:
 
 evaluator = repo / "scripts/eval_policy.py"
 source = evaluator.read_text()
+old_cuda_order = "    config = parse_args_and_config()\n    select_cuda_device(config)\n"
+new_cuda_order = "    config = parse_args_and_config()\n"
+cuda_after_env = "    env, gym_config_dict = make_env_from_configs(config, gym_config_dict, action_config_dict)\n    select_cuda_device(config)\n"
+if old_cuda_order in source:
+    if "    env, gym_config_dict = make_env_from_configs(config, gym_config_dict, action_config_dict)\n" not in source:
+        raise SystemExit("official evaluator environment creation differs")
+    source = source.replace(old_cuda_order, new_cuda_order)
+    source = source.replace("    env, gym_config_dict = make_env_from_configs(config, gym_config_dict, action_config_dict)\n", cuda_after_env)
+    print("moved Torch CUDA selection after DexSim initialization")
+elif cuda_after_env in source:
+    print("Torch CUDA selection order already fixed")
+else:
+    raise SystemExit("official evaluator CUDA initialization differs")
 old_config = '''    if expert_check:
         max_seed_attempts_per_episode = int(
             config.get("eval_max_seed_attempts_per_episodes", 100)
