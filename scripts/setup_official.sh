@@ -78,6 +78,7 @@ if old_cuda_order in source:
         raise SystemExit("official evaluator environment creation differs")
     source = source.replace(old_cuda_order, new_cuda_order)
     source = source.replace("    env, gym_config_dict = make_env_from_configs(config, gym_config_dict, action_config_dict)\n", cuda_after_env)
+    evaluator.write_text(source)
     print("moved Torch CUDA selection after DexSim initialization")
 elif cuda_after_env in source:
     print("Torch CUDA selection order already fixed")
