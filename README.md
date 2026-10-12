@@ -23,21 +23,21 @@ The results were obtained using the `random` setting, the official expert feasib
 
 Standardized format: `<namespace>/robosynchallenge-firststage-<policy>-<task>`. The complete list is managed in [`models.json`](models.json).
 
-Downloading checkpoint for single task：
+Download a checkpoint for a single task:
 
 ```bash
 uv run --python 3.11 --with huggingface_hub python scripts/download_checkpoint.py click_bell \
   --namespace ustc-huangjiale
 ```
 
-Downloading checkpoints for all tasks：
+Download checkpoints for all tasks:
 
 ```bash
 uv run --python 3.11 --with huggingface_hub python scripts/download_checkpoint.py --all \
   --namespace ustc-huangjiale
 ```
 
-Downloaded content will be written to`tasks/<task>/checkpoint/`.
+Downloaded content will be written to `tasks/<task>/checkpoint/`.
 
 ## Installation
 
