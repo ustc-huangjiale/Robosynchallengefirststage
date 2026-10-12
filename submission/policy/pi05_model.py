@@ -9,9 +9,38 @@ if devices := os.environ.get("PI05_JAX_VISIBLE_DEVICES"):
     jax.config.update("jax_cuda_visible_devices", devices)
 
 import numpy as np
+from openpi import transforms as openpi_transforms
 from openpi.models import pi0_config
 from openpi.policies import policy_config
 from openpi.training import config as training_config
+
+
+@dataclasses.dataclass(frozen=True)
+class _ScaleGripperActions:
+    scale: float
+
+    def __call__(self, data):
+        if "actions" not in data or self.scale == 1.0:
+            return data
+        result = dict(data)
+        actions = np.asarray(data["actions"]).copy()
+        actions[..., [6, 13]] *= self.scale
+        result["actions"] = actions
+        return result
+
+
+@dataclasses.dataclass(frozen=True)
+class _ScaledEmbodiChainDataConfig(training_config.LeRobotEmbodiChainDataConfig):
+    gripper_action_input_scale: float = 1.0
+    gripper_action_output_scale: float = 1.0
+
+    def create(self, assets_dirs, model_config):
+        config = super().create(assets_dirs, model_config)
+        transforms = config.data_transforms.push(
+            inputs=[_ScaleGripperActions(self.gripper_action_input_scale)],
+            outputs=[_ScaleGripperActions(self.gripper_action_output_scale)],
+        )
+        return dataclasses.replace(config, data_transforms=transforms)
 
 
 _TASK_REPO_IDS = {
@@ -50,7 +79,7 @@ def _get_config(name):
     return training_config.TrainConfig(
         name=name,
         model=pi0_config.Pi0Config(pi05=True, action_horizon=50),
-        data=training_config.LeRobotEmbodiChainDataConfig(
+        data=_ScaledEmbodiChainDataConfig(
             repo_id=repo_id,
             base_config=training_config.DataConfig(prompt_from_task=True),
             extra_delta_transform=True,
