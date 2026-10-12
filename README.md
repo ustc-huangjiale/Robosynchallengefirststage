@@ -54,6 +54,7 @@ export ROBOSYN_ROOT=/absolute/path/to/RoboSynChallenge
 export EMBODICHAIN_ROOT=/absolute/path/to/EmbodiChain
 cd ../Robosynchallengefirststage
 bash scripts/setup_official.sh
+python scripts/download_runtime_assets.py
 cd "$ROBOSYN_ROOT"
 GIT_LFS_SKIP_SMUDGE=1 uv sync
 (cd policy/pi05 && GIT_LFS_SKIP_SMUDGE=1 uv sync)

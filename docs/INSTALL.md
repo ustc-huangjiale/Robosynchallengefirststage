@@ -7,7 +7,8 @@
 3. 克隆 RoboSynChallenge 并固定到 `8818c82df5fa2522809b8105e7018950dcc9a9a8`。
 4. 设置 `ROBOSYN_ROOT` 和 `EMBODICHAIN_ROOT`，然后在安装依赖前运行 `bash scripts/setup_official.sh`。脚本会将 PI0.5 对齐到 EmbodiChain 所需的 dexsim 0.4.3、固定兼容 Ubuntu 20.04/glibc 2.31 的 pymeshlab，并让 DexSim 先于 Torch/JAX 建立单卡 CUDA context；成功判据不会被修改。
 5. 在 RoboSynChallenge 根目录运行 `uv sync`，并分别在 `policy/pi05` 和 `policy/act` 运行 `uv sync`。
-6. 从 Hugging Face 下载模型到 `tasks/<task>/checkpoint/`。
+6. 运行 `python scripts/download_runtime_assets.py`，通过 HTTPS 下载并校验 OpenPI PaliGemma tokenizer；这一步避免评测时由 gcsfs 直连 Google Storage。
+7. 从 Hugging Face 下载模型到 `tasks/<task>/checkpoint/`。
 
 ```bash
 curl -LsSf https://astral.sh/uv/0.13.0/install.sh | sh
@@ -22,6 +23,7 @@ export ROBOSYN_ROOT=/absolute/path/to/RoboSynChallenge
 export EMBODICHAIN_ROOT=/absolute/path/to/EmbodiChain
 cd Robosynchallengefirststage
 bash scripts/setup_official.sh
+python scripts/download_runtime_assets.py
 cd "$ROBOSYN_ROOT"
 GIT_LFS_SKIP_SMUDGE=1 uv sync
 (cd policy/pi05 && GIT_LFS_SKIP_SMUDGE=1 uv sync)
