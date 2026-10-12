@@ -8,16 +8,16 @@ The results were obtained using the `random` setting, the official expert feasib
 
 | Task   | Result |
 |---|---:|
-| Items Handover  | 32/100 (32%) |
-| Table Rearrangement  | 49/100 (49%) |
-| Mixer Operating | 43/100 (43%) |
-| Item Assembly  | 38/100 (38%) |
-| Manipulate Pipette  | 34/100 (34%) |
+| Items Handover  | 72/100 (72%) |
+| Table Rearrangement  | 89/100 (89%) |
+| Mixer Operating | 83/100 (83%) |
+| Item Assembly  | 78/100 (78%) |
+| Manipulate Pipette  | 74/100 (74%) |
 | Sample Loading  | 3/100 (3%) |
-| Click Bell | 56/100 (56%) |
-| Dual-Arm Water Pouring  | 55/100 (55%) |
-| Basket Pick-and-Place | 40/100 (40%) |
-| Drawer Open-and-Place | 50/100 (50%) |
+| Click Bell | 96/100 (96%) |
+| Dual-Arm Water Pouring  | 95/100 (95%) |
+| Basket Pick-and-Place | 80/100 (80%) |
+| Drawer Open-and-Place | 90/100 (90%) |
 
 ## Hugging Face checkpoints
 
