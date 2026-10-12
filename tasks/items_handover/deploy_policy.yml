@@ -16,3 +16,4 @@ model_name: items_handover
 checkpoint_id: 39999
 pi0_step: 20
 clip_actions: true
+instruction_override: "Pick up the pen, hand it over to the other arm and then place it in to the pen holder"

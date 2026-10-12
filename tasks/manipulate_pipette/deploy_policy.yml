@@ -15,3 +15,4 @@ train_config_name: pi05_base_robosynchallenge_manipulate_pipette_synth1200_v1
 model_name: manipulate_pipette
 checkpoint_id: 2500
 pi0_step: 10
+instruction_override: "Hold the pipette over the beaker with the right gripper and press its plunger once with the left gripper."

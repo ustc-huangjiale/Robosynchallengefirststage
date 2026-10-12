@@ -16,3 +16,4 @@ model_name: table_rearrangement
 checkpoint_id: 60000
 pi0_step: 10
 clip_actions: true
+instruction_override: "Pick the fork and the spoon, place them next to the plate."

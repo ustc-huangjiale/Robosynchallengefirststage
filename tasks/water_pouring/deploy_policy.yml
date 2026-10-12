@@ -15,3 +15,4 @@ train_config_name: pi05_water_pouring_official1k_v2
 model_name: water_pouring
 checkpoint_id: 2399
 pi0_step: 10
+instruction_override: "Pick the cup and the bottle with the other arm, pour the water from bottle to cup"

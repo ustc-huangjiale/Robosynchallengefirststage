@@ -16,3 +16,4 @@ model_name: drawer_open_place
 checkpoint_id: 2999
 pi0_step: 10
 denormalize_eef_action: true
+instruction_override: "Open the drawer, pick the tomato with the other arm then place it in the drawer."

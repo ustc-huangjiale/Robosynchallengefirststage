@@ -15,3 +15,4 @@ train_config_name: pi05_handle_basket_reachability_v2
 model_name: handle_basket
 checkpoint_id: 800
 pi0_step: 10
+instruction_override: "Pick the bottle then place it to the basket, carry the basket with the other arm."

@@ -15,3 +15,4 @@ train_config_name: pi05_click_bell_multisource_v1
 model_name: click_bell
 checkpoint_id: 2000
 pi0_step: 10
+instruction_override: "Click the bell"

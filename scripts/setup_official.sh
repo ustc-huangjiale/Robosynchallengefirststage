@@ -68,19 +68,21 @@ if new not in source:
 else:
     print("Pipette compatibility fix already present")
 
-# The submitted checkpoint was trained with this instruction. Keep the
-# simulator and success predicate official; only align the language input.
+# Language input now comes from each task's instruction_override in
+# tasks/<task>/deploy_policy.yml, so the official gym_config.json files stay
+# untouched. Restore the shipped Pipette instruction if an earlier run of this
+# script rewrote it.
 gym_config = repo / "configs/manipulate_pipette/random/gym_config.json"
 source = gym_config.read_text()
-old_instruction = "Use the pipette on the table to transfer liquid from one beaker to another"
-new_instruction = "Hold the pipette over the beaker with the right gripper and press its plunger once with the left gripper."
-if new_instruction not in source:
-    if source.count(old_instruction) != 1:
-        raise SystemExit("official Pipette instruction differs; refusing to modify it")
-    gym_config.write_text(source.replace(old_instruction, new_instruction))
-    print("aligned the Pipette language instruction with checkpoint training")
+official_instruction = "Use the pipette on the table to transfer liquid from one beaker to another"
+patched_instruction = "Hold the pipette over the beaker with the right gripper and press its plunger once with the left gripper."
+if official_instruction in source:
+    print("official Pipette instruction intact")
+elif source.count(patched_instruction) == 1:
+    gym_config.write_text(source.replace(patched_instruction, official_instruction))
+    print("reverted the Pipette gym_config instruction to the official text")
 else:
-    print("Pipette language instruction already aligned")
+    raise SystemExit("official Pipette instruction differs; refusing to modify it")
 
 evaluator = repo / "scripts/eval_policy.py"
 source = evaluator.read_text()
