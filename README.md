@@ -19,6 +19,25 @@ The results were obtained using the `random` setting, the official expert feasib
 | Basket Pick-and-Place | 80/100 (80%) |
 | Drawer Open-and-Place | 90/100 (90%) |
 
+## Initial reproduction (2026-10-12)
+
+The first independent run completed 100 valid episodes per task on the pinned official evaluator. These measurements precede subsequent configuration changes and reruns; the historical results above remain separately reported.
+
+| Task | Initial reproduction |
+|---|---:|
+| Items Handover | 58/100 |
+| Table Rearrangement | 86/100 |
+| Mixer Operating | 90/100 |
+| Item Assembly | 49/100 |
+| Manipulate Pipette | 65/100 |
+| Sample Loading | 0/100 |
+| Click Bell | 100/100 |
+| Dual-Arm Water Pouring | 98/100 |
+| Basket Pick-and-Place | 79/100 |
+| Drawer Open-and-Place | 85/100 |
+
+See the [Item Assembly investigation](docs/ITEM_ASSEMBLY_REPRODUCTION.md) for the verified historical 78/100, differing expert/reset/randomization workflows, and unresolved causes. [Machine-readable initial results](docs/results/reproduction_20261012.json) include the settings used at evaluation time.
+
 ## Hugging Face checkpoints
 
 Standardized format: `<namespace>/robosynchallenge-firststage-<policy>-<task>`. The complete list is managed in [`models.json`](models.json).
