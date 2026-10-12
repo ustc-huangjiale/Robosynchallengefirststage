@@ -5,7 +5,7 @@
 1. 安装 NVIDIA 驱动、Vulkan 和 Git LFS；使用下方命令安装已验证的 `uv 0.13.0` 和 Python 包 `huggingface_hub`。
 2. 克隆 EmbodiChain 并固定到官方 `v0.2.4.post1` 的精确提交 `89c14da8d0221dc4ee2a4a3e0ba1078b16d447bd`。不要使用随时间变化的 `main`。
 3. 克隆 RoboSynChallenge 并固定到 `8818c82df5fa2522809b8105e7018950dcc9a9a8`。
-4. 设置 `ROBOSYN_ROOT` 和 `EMBODICHAIN_ROOT`，然后在安装依赖前运行 `bash scripts/setup_official.sh`。脚本会对齐 dexsim 0.4.3，并固定兼容 Ubuntu 20.04/glibc 2.31 的 pymeshlab；成功判据不会被修改。
+4. 设置 `ROBOSYN_ROOT` 和 `EMBODICHAIN_ROOT`，然后在安装依赖前运行 `bash scripts/setup_official.sh`。脚本会保留官方 PI0.5 的 dexsim 0.4.1（通过 uv override 兼容 EmbodiChain 元数据；ACT 仍使用官方 0.4.3），并固定兼容 Ubuntu 20.04/glibc 2.31 的 pymeshlab；成功判据不会被修改。
 5. 在 RoboSynChallenge 根目录运行 `uv sync`，并分别在 `policy/pi05` 和 `policy/act` 运行 `uv sync`。
 6. 从 Hugging Face 下载模型到 `tasks/<task>/checkpoint/`。
 
