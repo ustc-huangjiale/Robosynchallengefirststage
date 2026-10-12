@@ -24,7 +24,11 @@ if [[ "$policy_name" == firststage_act ]]; then python_bin="${ACT_PYTHON:-$robos
 cd "$robosyn_root"
 gpu_id="${ROBOSYN_GPU_ID:-0}"
 [[ "$gpu_id" =~ ^[0-9]+$ ]] || { echo "ROBOSYN_GPU_ID must be a non-negative integer" >&2; exit 2; }
-unset CUDA_VISIBLE_DEVICES
+if [[ -n "${ROBOSYN_CUDA_VISIBLE_DEVICES:-}" ]]; then
+  export CUDA_VISIBLE_DEVICES="$ROBOSYN_CUDA_VISIBLE_DEVICES"
+else
+  unset CUDA_VISIBLE_DEVICES
+fi
 export PI05_JAX_VISIBLE_DEVICES="$gpu_id" EMBODICHAIN_ROOT="$embodichain_root"
 # JAX preallocates 75% of a GPU by default, which starves DexSim/Vulkan when
 # policy and simulator intentionally share one card. Grow the JAX pool on demand.
