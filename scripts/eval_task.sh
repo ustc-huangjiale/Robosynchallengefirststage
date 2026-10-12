@@ -21,6 +21,10 @@ ln -sfn "$source_dir" "$adapter_dir"
 mkdir -p "$result_dir"
 if [[ "$policy_name" == firststage_act ]]; then python_bin="${ACT_PYTHON:-$robosyn_root/policy/act/.venv/bin/python}"; else python_bin="${PI05_PYTHON:-$robosyn_root/policy/pi05/.venv/bin/python}"; fi
 [[ -x "$python_bin" ]] || { echo "policy Python not found: $python_bin" >&2; exit 2; }
+if ! "$python_bin" -c 'import ctypes; ctypes.CDLL("libnvoptix.so.1")' >/dev/null 2>&1; then
+  echo "NVIDIA OptiX runtime not found: libnvoptix.so.1 (install the complete NVIDIA userspace driver)" >&2
+  exit 2
+fi
 cd "$robosyn_root"
 gpu_id="${ROBOSYN_GPU_ID:-0}"
 policy_gpu_id="${ROBOSYN_POLICY_GPU_ID:-$gpu_id}"
