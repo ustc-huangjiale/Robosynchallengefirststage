@@ -26,14 +26,14 @@
 下载单个任务：
 
 ```bash
-python scripts/download_checkpoint.py click_bell \
+uv run --python 3.11 --with huggingface_hub python scripts/download_checkpoint.py click_bell \
   --namespace ustc-huangjiale
 ```
 
 下载全部任务：
 
 ```bash
-python scripts/download_checkpoint.py --all \
+uv run --python 3.11 --with huggingface_hub python scripts/download_checkpoint.py --all \
   --namespace ustc-huangjiale
 ```
 
