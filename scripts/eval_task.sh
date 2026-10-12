@@ -26,5 +26,8 @@ gpu_id="${ROBOSYN_GPU_ID:-0}"
 [[ "$gpu_id" =~ ^[0-9]+$ ]] || { echo "ROBOSYN_GPU_ID must be a non-negative integer" >&2; exit 2; }
 unset CUDA_VISIBLE_DEVICES
 export PI05_JAX_VISIBLE_DEVICES="$gpu_id" EMBODICHAIN_ROOT="$embodichain_root"
+# JAX preallocates 75% of a GPU by default, which starves DexSim/Vulkan when
+# policy and simulator intentionally share one card. Grow the JAX pool on demand.
+export XLA_PYTHON_CLIENT_PREALLOCATE="${XLA_PYTHON_CLIENT_PREALLOCATE:-false}"
 export PYTHONPATH="$submission_root:$robosyn_root:$robosyn_root/policy${PYTHONPATH:+:$PYTHONPATH}"
 exec "$python_bin" -u scripts/eval_policy.py --config "$config" --overrides --checkpoint_path "$checkpoint" --gpu_id "$gpu_id" --pytorch_device "cuda:$gpu_id" --eval_result_dir "$result_dir" "$@"
