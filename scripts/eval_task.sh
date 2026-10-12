@@ -23,15 +23,17 @@ if [[ "$policy_name" == firststage_act ]]; then python_bin="${ACT_PYTHON:-$robos
 [[ -x "$python_bin" ]] || { echo "policy Python not found: $python_bin" >&2; exit 2; }
 cd "$robosyn_root"
 gpu_id="${ROBOSYN_GPU_ID:-0}"
+policy_gpu_id="${ROBOSYN_POLICY_GPU_ID:-$gpu_id}"
 [[ "$gpu_id" =~ ^[0-9]+$ ]] || { echo "ROBOSYN_GPU_ID must be a non-negative integer" >&2; exit 2; }
+[[ "$policy_gpu_id" =~ ^[0-9]+$ ]] || { echo "ROBOSYN_POLICY_GPU_ID must be a non-negative integer" >&2; exit 2; }
 if [[ -n "${ROBOSYN_CUDA_VISIBLE_DEVICES:-}" ]]; then
   export CUDA_VISIBLE_DEVICES="$ROBOSYN_CUDA_VISIBLE_DEVICES"
 else
   unset CUDA_VISIBLE_DEVICES
 fi
-export PI05_JAX_VISIBLE_DEVICES="$gpu_id" EMBODICHAIN_ROOT="$embodichain_root"
+export PI05_JAX_VISIBLE_DEVICES="$policy_gpu_id" EMBODICHAIN_ROOT="$embodichain_root"
 # JAX preallocates 75% of a GPU by default, which starves DexSim/Vulkan when
 # policy and simulator intentionally share one card. Grow the JAX pool on demand.
 export XLA_PYTHON_CLIENT_PREALLOCATE="${XLA_PYTHON_CLIENT_PREALLOCATE:-false}"
 export PYTHONPATH="$submission_root:$robosyn_root:$robosyn_root/policy${PYTHONPATH:+:$PYTHONPATH}"
-exec "$python_bin" -u scripts/eval_policy.py --config "$config" --overrides --checkpoint_path "$checkpoint" --gpu_id "$gpu_id" --pytorch_device "cuda:$gpu_id" --eval_result_dir "$result_dir" "$@"
+exec "$python_bin" -u scripts/eval_policy.py --config "$config" --overrides --checkpoint_path "$checkpoint" --gpu_id "$gpu_id" --pytorch_device "cuda:$policy_gpu_id" --eval_result_dir "$result_dir" "$@"

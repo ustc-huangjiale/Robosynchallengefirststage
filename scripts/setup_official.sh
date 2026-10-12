@@ -70,6 +70,27 @@ else:
 
 evaluator = repo / "scripts/eval_policy.py"
 source = evaluator.read_text()
+old_device_select = '''def select_cuda_device(config):
+    """Align an unqualified policy CUDA device with the simulator GPU."""
+    pytorch_device = str(config.get("pytorch_device", ""))
+    if pytorch_device.startswith("cuda") and torch.cuda.is_available():
+        torch.cuda.set_device(int(config.get("gpu_id", 0)))
+'''
+new_device_select = '''def select_cuda_device(config):
+    """Select the policy's logical CUDA device after simulator startup."""
+    pytorch_device = str(config.get("pytorch_device", ""))
+    if pytorch_device.startswith("cuda") and torch.cuda.is_available():
+        device = torch.device(pytorch_device)
+        torch.cuda.set_device(0 if device.index is None else device.index)
+'''
+if old_device_select in source:
+    source = source.replace(old_device_select, new_device_select)
+    print("separated simulator physical GPU from policy logical CUDA device")
+elif new_device_select in source:
+    print("simulator/policy CUDA device separation already fixed")
+else:
+    raise SystemExit("official evaluator CUDA device selector differs")
+evaluator.write_text(source)
 old_cuda_order = "    config = parse_args_and_config()\n    select_cuda_device(config)\n"
 new_cuda_order = "    config = parse_args_and_config()\n"
 cuda_after_env = "    env, gym_config_dict = make_env_from_configs(config, gym_config_dict, action_config_dict)\n    select_cuda_device(config)\n"
