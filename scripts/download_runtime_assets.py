@@ -5,8 +5,7 @@ from __future__ import annotations
 import hashlib
 import os
 from pathlib import Path
-import shutil
-import urllib.request
+import subprocess
 
 URL = "https://storage.googleapis.com/big_vision/paligemma_tokenizer.model"
 SHA256 = "8986bb4f423f07f8c7f70d0dbe3526fb2316056c17bae71b1ea975e77a168fc6"
@@ -31,8 +30,25 @@ def main() -> None:
     if partial.exists():
         partial.unlink()
     print(f"downloading {URL} -> {target}")
-    with urllib.request.urlopen(URL, timeout=120) as response, partial.open("wb") as output:
-        shutil.copyfileobj(response, output)
+    try:
+        subprocess.run(
+            [
+                "curl",
+                "--fail",
+                "--location",
+                "--retry",
+                "3",
+                "--connect-timeout",
+                "30",
+                "--output",
+                str(partial),
+                URL,
+            ],
+            check=True,
+        )
+    except (OSError, subprocess.CalledProcessError):
+        partial.unlink(missing_ok=True)
+        raise
     actual = digest(partial)
     if actual != SHA256:
         partial.unlink()
