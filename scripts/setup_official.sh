@@ -28,7 +28,7 @@ def replace_once(path, old, new, already_present, description):
 # Align PI0.5 with EmbodiChain v0.2.4.post1 and retain the Ubuntu
 # 20.04-compatible pymeshlab wheel.
 pi05_project = repo / "policy/pi05/pyproject.toml"
-replace_once(pi05_project, "    \"dexsim-engine==0.4.1\",", "    \"dexsim-engine==0.4.3\",", "    \"dexsim-engine==0.4.3\",", "PI0.5 dexsim 0.4.3 compatibility pin")
+replace_once(pi05_project, "    \"dexsim-engine==0.4.1\",\n    \"embodichain\",", "    \"dexsim-engine==0.4.3\",\n    \"embodichain\",", "    \"dexsim-engine==0.4.3\",\n    \"embodichain\",", "PI0.5 dexsim 0.4.3 compatibility pin")
 source = pi05_project.read_text()
 override = "override-dependencies = [\n    \"dexsim-engine==0.4.1\",\n"
 if override in source:
