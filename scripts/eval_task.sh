@@ -12,7 +12,8 @@ result_dir="$submission_root/eval_results/$task"
 [[ -f "$robosyn_root/scripts/eval_policy.py" ]] || { echo "invalid ROBOSYN_ROOT: $robosyn_root" >&2; exit 2; }
 [[ -d "$embodichain_root/embodichain" ]] || { echo "invalid EMBODICHAIN_ROOT: $embodichain_root" >&2; exit 2; }
 if [[ ! -e "$checkpoint/params" && ! -e "$checkpoint/model.safetensors" && ! -e "$checkpoint/config.json" && ! -e "$checkpoint/pretrained_model/config.json" ]]; then echo "checkpoint is empty: $checkpoint" >&2; exit 2; fi
-policy_name="$(python3 -c 'import sys,yaml; print(yaml.safe_load(open(sys.argv[1]))["policy_name"])' "$config")"
+policy_name="$(sed -n 's/^policy_name:[[:space:]]*//p' "$config")"
+[[ -n "$policy_name" ]] || { echo "policy_name is missing from $config" >&2; exit 2; }
 adapter_dir="$robosyn_root/policy/$policy_name"
 source_dir="$submission_root/submission/policy_packages/$policy_name"
 [[ ! -e "$adapter_dir" || -L "$adapter_dir" ]] || { echo "refusing to overwrite $adapter_dir" >&2; exit 2; }

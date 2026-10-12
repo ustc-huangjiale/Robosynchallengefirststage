@@ -1,13 +1,38 @@
 #!/usr/bin/env bash
 set -euo pipefail
 repo="${ROBOSYN_ROOT:?set ROBOSYN_ROOT to the official RoboSynChallenge checkout}"
+embodichain_repo="${EMBODICHAIN_ROOT:?set EMBODICHAIN_ROOT to the EmbodiChain checkout}"
 expected=8818c82df5fa2522809b8105e7018950dcc9a9a8
+expected_embodichain=89c14da8d0221dc4ee2a4a3e0ba1078b16d447bd
 actual="$(git -C "$repo" rev-parse HEAD)"
+actual_embodichain="$(git -C "$embodichain_repo" rev-parse HEAD)"
 [[ "$actual" == "$expected" ]] || { echo "expected official commit $expected, got $actual" >&2; exit 2; }
+[[ "$actual_embodichain" == "$expected_embodichain" ]] || { echo "expected EmbodiChain commit $expected_embodichain, got $actual_embodichain" >&2; exit 2; }
 python3 - "$repo" <<'PYCODE'
 from pathlib import Path
 import sys
 repo = Path(sys.argv[1])
+
+
+def replace_once(path, old, new, already_present, description):
+    source = path.read_text()
+    if already_present in source:
+        print(f"{description} already applied")
+        return
+    if source.count(old) != 1:
+        raise SystemExit(f"{path} differs; refusing to apply {description}")
+    path.write_text(source.replace(old, new))
+    print(f"applied {description}")
+
+
+# Align the pinned official checkout with EmbodiChain v0.2.4.post1 before
+# `uv sync`, and retain the Ubuntu 20.04-compatible pymeshlab wheel.
+pi05_project = repo / "policy/pi05/pyproject.toml"
+replace_once(pi05_project, "    \"dexsim-engine==0.4.1\",", "    \"dexsim-engine==0.4.3\",", "    \"dexsim-engine==0.4.3\",", "PI0.5 dexsim 0.4.3 compatibility pin")
+replace_once(pi05_project, "    \"av==15.1.0\"\n]", "    \"av==15.1.0\",\n    \"pymeshlab==2023.12.post3\"\n]", "    \"pymeshlab==2023.12.post3\"", "PI0.5 Ubuntu 20.04 pymeshlab pin")
+act_project = repo / "policy/act/pyproject.toml"
+replace_once(act_project, "    \"dexsim-engine==0.4.3\",\n]", "    \"dexsim-engine==0.4.3\",\n    \"pymeshlab==2023.12.post3\",\n]", "    \"pymeshlab==2023.12.post3\",", "ACT Ubuntu 20.04 pymeshlab pin")
+
 action_bank = repo / "robosynchallenge/tasks/manipulate_pipette/action_bank.py"
 source = action_bank.read_text()
 old = "return ret.positions[0].numpy().T"

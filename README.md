@@ -42,18 +42,22 @@ python scripts/download_checkpoint.py --all \
 ## 安装
 
 ```bash
+curl -LsSf https://astral.sh/uv/0.13.0/install.sh | sh
+export PATH="$HOME/.local/bin:$PATH"
 git clone https://github.com/DexForce/EmbodiChain.git
+git -C EmbodiChain checkout 89c14da8d0221dc4ee2a4a3e0ba1078b16d447bd
 git clone https://github.com/EDEM-AI/RoboSynChallenge.git
 git clone https://github.com/ustc-huangjiale/Robosynchallengefirststage.git
 cd RoboSynChallenge
 git checkout 8818c82df5fa2522809b8105e7018950dcc9a9a8
-uv sync
-(cd policy/pi05 && uv sync)
-(cd policy/act && uv sync)
 export ROBOSYN_ROOT=/absolute/path/to/RoboSynChallenge
 export EMBODICHAIN_ROOT=/absolute/path/to/EmbodiChain
 cd ../Robosynchallengefirststage
 bash scripts/setup_official.sh
+cd "$ROBOSYN_ROOT"
+GIT_LFS_SKIP_SMUDGE=1 uv sync
+(cd policy/pi05 && GIT_LFS_SKIP_SMUDGE=1 uv sync)
+(cd policy/act && GIT_LFS_SKIP_SMUDGE=1 uv sync)
 ```
 
 详细安装说明见 [`docs/INSTALL.md`](docs/INSTALL.md)，评测约定见 [`docs/EVALUATION.md`](docs/EVALUATION.md)。
