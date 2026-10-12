@@ -149,4 +149,39 @@ elif "candidate seeds per episode: unlimited" in source:
     print("candidate-seed limit already removed")
 else:
     raise SystemExit("official evaluator differs; refusing to modify it")
+
+# Some simulator backends terminate the process during env.close(). Persist the
+# official summary and metrics before closing the environment.
+source = evaluator.read_text()
+old_close_order = """    finally:
+        if video_recorder:
+            video_recorder.close_episode(success=False)
+        env.close()
+
+    inference_call_count"""
+new_close_order = """    finally:
+        if video_recorder:
+            video_recorder.close_episode(success=False)
+
+    inference_call_count"""
+close_after_metrics = """    print(f"{'='*50}")
+
+    env.close()
+
+
+if __name__ == "__main__":"""
+if close_after_metrics in source:
+    print("metrics-before-environment-close ordering already fixed")
+elif old_close_order in source:
+    source = source.replace(old_close_order, new_close_order)
+    main_guard = """    print(f"{'='*50}")
+
+
+if __name__ == "__main__":"""
+    if source.count(main_guard) != 1:
+        raise SystemExit("official evaluator final summary differs")
+    evaluator.write_text(source.replace(main_guard, close_after_metrics))
+    print("moved environment close after metrics persistence")
+else:
+    raise SystemExit("official evaluator environment-close ordering differs")
 PYCODE
