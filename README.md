@@ -1,12 +1,12 @@
 # RoboSynChallenge First Stage
 
-第一阶段十个任务的模型适配器、评测配置、模型下载与复现说明。每个任务对应一个独立 Hugging Face 模型仓库，权重统一位于仓库的 `ckpt/` 子目录。
+Model configurations, model downloads, and detailed specifications for the ten tasks in Phase 1. Each task corresponds to a dedicated Hugging Face model repository, with model weights consistently located in the repository's `ckpt/` subdirectory.
 
-## 评测结果
+## Results
 
-除特别注明外，结果使用 `random` setting、官方专家可行性预检、官方成功判据和 100 个有效回合。
+The results were obtained using the `random` setting, the official expert feasibility pre-check, the official success criteria, and 100 valid episodes.
 
-| 任务   | 结果 |
+| Task   | Result |
 |---|---:|
 | Items Handover  | 32/100 (32%) |
 | Table Rearrangement  | 49/100 (49%) |
@@ -19,27 +19,27 @@
 | Basket Pick-and-Place | 40/100 (40%) |
 | Drawer Open-and-Place | 50/100 (50%) |
 
-## Hugging Face 模型命名
+## Hugging Face checkpoints
 
-统一格式：`<namespace>/robosynchallenge-firststage-<policy>-<task>`。完整列表由 [`models.json`](models.json) 管理。
+Standardized format: `<namespace>/robosynchallenge-firststage-<policy>-<task>`. The complete list is managed in [`models.json`](models.json).
 
-下载单个任务：
+Downloading checkpoint for single task：
 
 ```bash
 uv run --python 3.11 --with huggingface_hub python scripts/download_checkpoint.py click_bell \
   --namespace ustc-huangjiale
 ```
 
-下载全部任务：
+Downloading checkpoints for all tasks：
 
 ```bash
 uv run --python 3.11 --with huggingface_hub python scripts/download_checkpoint.py --all \
   --namespace ustc-huangjiale
 ```
 
-下载内容会写入 `tasks/<task>/checkpoint/`。
+Downloaded content will be written to`tasks/<task>/checkpoint/`.
 
-## 安装
+## Installation
 
 ```bash
 curl -LsSf https://astral.sh/uv/0.13.0/install.sh | sh
@@ -61,11 +61,9 @@ GIT_LFS_SKIP_SMUDGE=1 uv sync
 (cd policy/act && GIT_LFS_SKIP_SMUDGE=1 uv sync)
 ```
 
-详细安装说明见 [`docs/INSTALL.md`](docs/INSTALL.md)，评测约定见 [`docs/EVALUATION.md`](docs/EVALUATION.md)。
+For detailed installation instructions, see [`docs/INSTALL.md`](docs/INSTALL.md); for evaluation conventions, see [`docs/EVALUATION.md`](docs/EVALUATION.md).
 
-## 官方测试命令
-
-所有命令默认使用单卡 GPU0：
+## Inference
 
 ```bash
 bash tasks/items_handover/eval.sh
@@ -80,4 +78,3 @@ bash tasks/handle_basket/eval.sh
 bash tasks/drawer_open_place/eval.sh
 ```
 
-每个配置默认 100 回合、`random` setting、官方专家可行性预检、无视频。
