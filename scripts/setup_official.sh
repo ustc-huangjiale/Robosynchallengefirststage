@@ -29,7 +29,7 @@ def replace_once(path, old, new, already_present, description):
 # EmbodiChain metadata, and retain the Ubuntu 20.04-compatible pymeshlab wheel.
 pi05_project = repo / "policy/pi05/pyproject.toml"
 replace_once(pi05_project, "    \"dexsim-engine==0.4.3\",", "    \"dexsim-engine==0.4.1\",", "    \"dexsim-engine==0.4.1\",", "PI0.5 official dexsim 0.4.1 pin")
-replace_once(pi05_project, "override-dependencies = [\n", "override-dependencies = [\n    \"dexsim-engine==0.4.1\",\n", "    \"dexsim-engine==0.4.1\",\n", "PI0.5 EmbodiChain dexsim metadata override")
+replace_once(pi05_project, "override-dependencies = [\n", "override-dependencies = [\n    \"dexsim-engine==0.4.1\",\n", "override-dependencies = [\n    \"dexsim-engine==0.4.1\",\n", "PI0.5 EmbodiChain dexsim metadata override")
 replace_once(pi05_project, "    \"av==15.1.0\"\n]", "    \"av==15.1.0\",\n    \"pymeshlab==2023.12.post3\"\n]", "    \"pymeshlab==2023.12.post3\"", "PI0.5 Ubuntu 20.04 pymeshlab pin")
 act_project = repo / "policy/act/pyproject.toml"
 replace_once(act_project, "    \"av>=14.2.0\",\n    \"dexsim-engine==0.4.3\",\n]", "    \"av>=14.2.0\",\n    \"dexsim-engine==0.4.3\",\n    \"pymeshlab==2023.12.post3\",\n]", "    \"pymeshlab==2023.12.post3\",", "ACT Ubuntu 20.04 pymeshlab pin")
