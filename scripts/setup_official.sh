@@ -8,7 +8,7 @@ actual="$(git -C "$repo" rev-parse HEAD)"
 actual_embodichain="$(git -C "$embodichain_repo" rev-parse HEAD)"
 [[ "$actual" == "$expected" ]] || { echo "expected official commit $expected, got $actual" >&2; exit 2; }
 [[ "$actual_embodichain" == "$expected_embodichain" ]] || { echo "expected EmbodiChain commit $expected_embodichain, got $actual_embodichain" >&2; exit 2; }
-python3 - "$repo" <<'PYCODE'
+python3 - "$repo" "$embodichain_repo" <<'PYCODE'
 from pathlib import Path
 import sys
 repo = Path(sys.argv[1])
@@ -41,6 +41,20 @@ else:
 replace_once(pi05_project, "    \"av==15.1.0\"\n]", "    \"av==15.1.0\",\n    \"pymeshlab==2023.12.post3\"\n]", "    \"pymeshlab==2023.12.post3\"", "PI0.5 Ubuntu 20.04 pymeshlab pin")
 act_project = repo / "policy/act/pyproject.toml"
 replace_once(act_project, "    \"av>=14.2.0\",\n    \"dexsim-engine==0.4.3\",\n]", "    \"av>=14.2.0\",\n    \"dexsim-engine==0.4.3\",\n    \"pymeshlab==2023.12.post3\",\n]", "    \"pymeshlab==2023.12.post3\",", "ACT Ubuntu 20.04 pymeshlab pin")
+
+# Keep expert CP-SAT scheduling deterministic and avoid native worker-pool
+# conflicts with policy runtimes initialized in the same process.
+action_scheduler = (
+    Path(sys.argv[2])
+    / "embodichain/lab/gym/envs/action_bank/configurable_action.py"
+)
+replace_once(
+    action_scheduler,
+    "        solver = cp_model.CpSolver()\n        status = solver.solve(model)",
+    "        solver = cp_model.CpSolver()\n        solver.parameters.num_search_workers = 1\n        status = solver.solve(model)",
+    "        solver.parameters.num_search_workers = 1",
+    "single-worker expert CP-SAT scheduling",
+)
 
 action_bank = repo / "robosynchallenge/tasks/manipulate_pipette/action_bank.py"
 source = action_bank.read_text()
