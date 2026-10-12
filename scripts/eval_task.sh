@@ -22,7 +22,9 @@ mkdir -p "$result_dir"
 if [[ "$policy_name" == firststage_act ]]; then python_bin="${ACT_PYTHON:-$robosyn_root/policy/act/.venv/bin/python}"; else python_bin="${PI05_PYTHON:-$robosyn_root/policy/pi05/.venv/bin/python}"; fi
 [[ -x "$python_bin" ]] || { echo "policy Python not found: $python_bin" >&2; exit 2; }
 cd "$robosyn_root"
+gpu_id="${ROBOSYN_GPU_ID:-0}"
+[[ "$gpu_id" =~ ^[0-9]+$ ]] || { echo "ROBOSYN_GPU_ID must be a non-negative integer" >&2; exit 2; }
 unset CUDA_VISIBLE_DEVICES
-export PI05_JAX_VISIBLE_DEVICES=0 EMBODICHAIN_ROOT="$embodichain_root"
+export PI05_JAX_VISIBLE_DEVICES="$gpu_id" EMBODICHAIN_ROOT="$embodichain_root"
 export PYTHONPATH="$submission_root:$robosyn_root:$robosyn_root/policy${PYTHONPATH:+:$PYTHONPATH}"
-exec "$python_bin" -u scripts/eval_policy.py --config "$config" --overrides --checkpoint_path "$checkpoint" --gpu_id 0 --pytorch_device cuda:0 --eval_result_dir "$result_dir" "$@"
+exec "$python_bin" -u scripts/eval_policy.py --config "$config" --overrides --checkpoint_path "$checkpoint" --gpu_id "$gpu_id" --pytorch_device "cuda:$gpu_id" --eval_result_dir "$result_dir" "$@"
