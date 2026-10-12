@@ -31,7 +31,7 @@ pi05_project = repo / "policy/pi05/pyproject.toml"
 replace_once(pi05_project, "    \"dexsim-engine==0.4.1\",", "    \"dexsim-engine==0.4.3\",", "    \"dexsim-engine==0.4.3\",", "PI0.5 dexsim 0.4.3 compatibility pin")
 replace_once(pi05_project, "    \"av==15.1.0\"\n]", "    \"av==15.1.0\",\n    \"pymeshlab==2023.12.post3\"\n]", "    \"pymeshlab==2023.12.post3\"", "PI0.5 Ubuntu 20.04 pymeshlab pin")
 act_project = repo / "policy/act/pyproject.toml"
-replace_once(act_project, "    \"dexsim-engine==0.4.3\",\n]", "    \"dexsim-engine==0.4.3\",\n    \"pymeshlab==2023.12.post3\",\n]", "    \"pymeshlab==2023.12.post3\",", "ACT Ubuntu 20.04 pymeshlab pin")
+replace_once(act_project, "    \"av>=14.2.0\",\n    \"dexsim-engine==0.4.3\",\n]", "    \"av>=14.2.0\",\n    \"dexsim-engine==0.4.3\",\n    \"pymeshlab==2023.12.post3\",\n]", "    \"pymeshlab==2023.12.post3\",", "ACT Ubuntu 20.04 pymeshlab pin")
 
 action_bank = repo / "robosynchallenge/tasks/manipulate_pipette/action_bank.py"
 source = action_bank.read_text()
