@@ -1,0 +1,18 @@
+policy_name: firststage_click_bell
+task_name: click_bell
+setting: random
+seed: 0
+max_episodes: 100
+max_steps: 361
+eval_expert_check: true
+headless: true
+pytorch_device: cuda:0
+renderer: hybrid
+filter_dataset_saving: true
+eval_video_log: false
+checkpoint_path: null
+train_config_name: pi05_click_bell_multisource_v1
+model_name: click_bell
+checkpoint_id: 2000
+pi0_step: 10
+instruction_override: "Click the bell"

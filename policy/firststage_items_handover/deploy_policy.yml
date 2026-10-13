@@ -1,0 +1,19 @@
+policy_name: firststage_items_handover
+task_name: items_handover
+setting: random
+seed: 0
+max_episodes: 100
+max_steps: 350
+eval_expert_check: true
+headless: true
+pytorch_device: cuda:0
+renderer: hybrid
+filter_dataset_saving: true
+eval_video_log: false
+checkpoint_path: null
+train_config_name: pi05_items_handover_release_handover46_v9_full
+model_name: items_handover
+checkpoint_id: 39999
+pi0_step: 20
+clip_actions: true
+instruction_override: "Pick up the pen, hand it over to the other arm and then place it in to the pen holder"

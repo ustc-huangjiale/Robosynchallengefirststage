@@ -1,0 +1,9 @@
+# Runtime dependency manifest for the official policy/act environment.
+# The authoritative frozen resolution is policy/act/uv.lock in official
+# RoboSynChallenge commit 8818c82df5fa2522809b8105e7018950dcc9a9a8.
+av>=14.2.0
+lerobot @ git+https://github.com/huggingface/lerobot.git@b883328e6c95681ca90a18b102e4ae5e1f91e2bf
+numpy>=1.22.4,<2.0.0
+pyyaml>=6.0
+torch>=2.2.1,<2.8.0
+torchvision>=0.21.0,<0.23.0

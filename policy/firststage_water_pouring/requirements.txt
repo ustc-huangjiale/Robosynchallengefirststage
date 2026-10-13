@@ -1,0 +1,1 @@
+-r ../_shared/pi05-requirements.txt

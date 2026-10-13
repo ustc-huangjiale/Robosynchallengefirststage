@@ -1,0 +1,18 @@
+policy_name: firststage_sample_loading
+task_name: sample_loading
+setting: random
+seed: 0
+max_episodes: 100
+max_steps: 500
+eval_expert_check: true
+headless: true
+pytorch_device: cuda:0
+renderer: hybrid
+filter_dataset_saving: true
+eval_video_log: false
+checkpoint_path: null
+train_config_name: pi05_sample_loading_official8818_best
+model_name: sample_loading
+checkpoint_id: 4900
+pi0_step: 50
+instruction_override: "Pick up the test tube, and it to the other arm, and insert it to the rack."

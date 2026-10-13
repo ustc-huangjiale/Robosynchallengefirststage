@@ -1,0 +1,18 @@
+policy_name: firststage_handle_basket
+task_name: handle_basket
+setting: random
+seed: 0
+max_episodes: 100
+max_steps: 500
+eval_expert_check: true
+headless: true
+pytorch_device: cuda:0
+renderer: hybrid
+filter_dataset_saving: true
+eval_video_log: false
+checkpoint_path: null
+train_config_name: pi05_handle_basket_reachability_v2
+model_name: handle_basket
+checkpoint_id: 800
+pi0_step: 10
+instruction_override: "Pick the bottle then place it to the basket, carry the basket with the other arm."

@@ -4,3 +4,4 @@ __pycache__/
 hf_sources.local.json
 tasks/*/checkpoint/*
 !tasks/*/checkpoint/README.md
+policy/firststage_*/checkpoint/

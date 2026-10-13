@@ -1,6 +1,8 @@
 # RoboSynChallenge First Stage
 
-Model configurations, model downloads, and detailed specifications for the ten tasks in Phase 1. Each task corresponds to a dedicated Hugging Face model repository, with model weights consistently located in the repository's `ckpt/` subdirectory.
+Model configurations, model downloads, and complete retained policy packages for the ten tasks in Phase 1. Each task corresponds to a dedicated Hugging Face model repository, with model weights consistently located in the repository's `ckpt/` subdirectory.
+
+The submission artifact is the complete [`policy/`](policy/) tree. It contains the adapters, model-side transforms, dependency manifests, `eval.sh`, `deploy_policy.py`, and `deploy_policy.yml` required after the organizer discards every other repository directory.
 
 ## Results
 
@@ -37,7 +39,7 @@ uv run --python 3.11 --with huggingface_hub python scripts/download_checkpoint.p
   --namespace ustc-huangjiale
 ```
 
-Downloaded content will be written to `tasks/<task>/checkpoint/`.
+For local legacy launchers, downloaded content is written to `tasks/<task>/checkpoint/`. For the retained official submission flow, download a model directly and pass its `ckpt/` directory to `policy/firststage_<task>/eval.sh` as shown below.
 
 ## Installation
 
@@ -47,34 +49,23 @@ export PATH="$HOME/.local/bin:$PATH"
 git clone https://github.com/DexForce/EmbodiChain.git
 git -C EmbodiChain checkout 89c14da8d0221dc4ee2a4a3e0ba1078b16d447bd
 git clone https://github.com/EDEM-AI/RoboSynChallenge.git
+git -C RoboSynChallenge checkout 8818c82df5fa2522809b8105e7018950dcc9a9a8
 git clone https://github.com/ustc-huangjiale/Robosynchallengefirststage.git
+cp -a Robosynchallengefirststage/policy/. RoboSynChallenge/policy/
 cd RoboSynChallenge
-git checkout 8818c82df5fa2522809b8105e7018950dcc9a9a8
-export ROBOSYN_ROOT=/absolute/path/to/RoboSynChallenge
-export EMBODICHAIN_ROOT=/absolute/path/to/EmbodiChain
-cd ../Robosynchallengefirststage
-bash scripts/setup_official.sh
-python scripts/download_runtime_assets.py
-cd "$ROBOSYN_ROOT"
 GIT_LFS_SKIP_SMUDGE=1 uv sync
 (cd policy/pi05 && GIT_LFS_SKIP_SMUDGE=1 uv sync)
 (cd policy/act && GIT_LFS_SKIP_SMUDGE=1 uv sync)
 ```
 
-For detailed installation instructions, see [`docs/INSTALL.md`](docs/INSTALL.md); for evaluation conventions, see [`docs/EVALUATION.md`](docs/EVALUATION.md).
+For the exact retained-tree contract and dependency revisions, see [`policy/README.md`](policy/README.md) and [`policy/DEPENDENCIES.md`](policy/DEPENDENCIES.md).
 
 ## Inference
 
 ```bash
-bash tasks/items_handover/eval.sh
-bash tasks/table_rearrangement/eval.sh
-bash tasks/mixer_operating/eval.sh
-bash tasks/item_assembly/eval.sh
-bash tasks/manipulate_pipette/eval.sh
-bash tasks/sample_loading/eval.sh
-bash tasks/click_bell/eval.sh
-bash tasks/water_pouring/eval.sh
-bash tasks/handle_basket/eval.sh
-bash tasks/drawer_open_place/eval.sh
+hf download ustc-huangjiale/robosynchallenge-firststage-pi05-click-bell \
+  --include 'ckpt/**' --local-dir checkpoints/click_bell
+bash policy/firststage_click_bell/eval.sh "$PWD/checkpoints/click_bell/ckpt"
 ```
 
+Replace `click_bell` with the selected task. See [`policy/README.md`](policy/README.md) for the retained-tree installation contract and all evaluation details.
