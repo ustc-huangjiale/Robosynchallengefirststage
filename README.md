@@ -1,71 +1,73 @@
-# RoboSynChallenge First Stage
+# RoboSynChallenge Policies
 
-Model configurations, model downloads, and complete retained policy packages for the ten tasks in Phase 1. Each task corresponds to a dedicated Hugging Face model repository, with model weights consistently located in the repository's `ckpt/` subdirectory.
+This repository provides complete policy packages for ten RoboSynChallenge tasks. The official evaluator retains only the [`policy/`](policy/) directory.
 
-The submission artifact is the complete [`policy/`](policy/) tree. It contains the adapters, model-side transforms, dependency manifests, `eval.sh`, `deploy_policy.py`, and `deploy_policy.yml` required after the organizer discards every other repository directory.
+## Results and checkpoints
 
-## Results
+The reported results use the `random` setting, the official expert feasibility check, the official success criteria, and 100 valid episodes.
 
-The results were obtained using the `random` setting, the official expert feasibility pre-check, the official success criteria, and 100 valid episodes.
+| Task | Policy | Step | Result | Checkpoint |
+|---|---|---:|---:|---|
+| Click Bell | `policy/click_bell` | 2000 | 96/100 | [Hugging Face](https://huggingface.co/ustc-huangjiale/robosynchallenge-firststage-pi05-click-bell) |
+| Drawer Open-and-Place | `policy/drawer_open_place` | 2999 | 90/100 | [Hugging Face](https://huggingface.co/ustc-huangjiale/robosynchallenge-firststage-pi05-drawer-open-place) |
+| Basket Pick-and-Place | `policy/handle_basket` | 800 | 80/100 | [Hugging Face](https://huggingface.co/ustc-huangjiale/robosynchallenge-firststage-pi05-handle-basket) |
+| Item Assembly | `policy/item_assembly` | 080000 | 78/100 | [Hugging Face](https://huggingface.co/ustc-huangjiale/robosynchallenge-firststage-act-item-assembly) |
+| Items Handover | `policy/items_handover` | 39999 | 72/100 | [Hugging Face](https://huggingface.co/ustc-huangjiale/robosynchallenge-firststage-pi05-items-handover) |
+| Manipulate Pipette | `policy/manipulate_pipette` | 2500 | 74/100 | [Hugging Face](https://huggingface.co/ustc-huangjiale/robosynchallenge-firststage-pi05-manipulate-pipette) |
+| Mixer Operating | `policy/mixer_operating` | 080000 | 83/100 | [Hugging Face](https://huggingface.co/ustc-huangjiale/robosynchallenge-firststage-act-mixer-operating) |
+| Sample Loading | `policy/sample_loading` | 4900 | 3/100 | [Hugging Face](https://huggingface.co/ustc-huangjiale/robosynchallenge-firststage-pi05-sample-loading) |
+| Table Rearrangement | `policy/table_rearrangement` | 60000 | 89/100 | [Hugging Face](https://huggingface.co/ustc-huangjiale/robosynchallenge-firststage-pi05-table-rearrangement) |
+| Dual-Arm Water Pouring | `policy/water_pouring` | 2399 | 95/100 | [Hugging Face](https://huggingface.co/ustc-huangjiale/robosynchallenge-firststage-pi05-water-pouring) |
 
-| Task   | Result |
-|---|---:|
-| Items Handover  | 72/100 (72%) |
-| Table Rearrangement  | 89/100 (89%) |
-| Mixer Operating | 83/100 (83%) |
-| Item Assembly  | 78/100 (78%) |
-| Manipulate Pipette  | 74/100 (74%) |
-| Sample Loading  | 3/100 (3%) |
-| Click Bell | 96/100 (96%) |
-| Dual-Arm Water Pouring  | 95/100 (95%) |
-| Basket Pick-and-Place | 80/100 (80%) |
-| Drawer Open-and-Place | 90/100 (90%) |
-
-## Hugging Face checkpoints
-
-Standardized format: `<namespace>/robosynchallenge-firststage-<policy>-<task>`. The complete list is managed in [`models.json`](models.json).
-
-Download a checkpoint for a single task:
-
-```bash
-uv run --python 3.11 --with huggingface_hub python scripts/download_checkpoint.py click_bell \
-  --namespace ustc-huangjiale
-```
-
-Download checkpoints for all tasks:
-
-```bash
-uv run --python 3.11 --with huggingface_hub python scripts/download_checkpoint.py --all \
-  --namespace ustc-huangjiale
-```
-
-For local legacy launchers, downloaded content is written to `tasks/<task>/checkpoint/`. For the retained official submission flow, download a model directly and pass its `ckpt/` directory to `policy/firststage_<task>/eval.sh` as shown below.
+Model files are stored in the `ckpt/` directory of each Hugging Face repository and are not committed to GitHub.
 
 ## Installation
 
 ```bash
 curl -LsSf https://astral.sh/uv/0.13.0/install.sh | sh
 export PATH="$HOME/.local/bin:$PATH"
+
 git clone https://github.com/DexForce/EmbodiChain.git
 git -C EmbodiChain checkout 89c14da8d0221dc4ee2a4a3e0ba1078b16d447bd
+
 git clone https://github.com/EDEM-AI/RoboSynChallenge.git
 git -C RoboSynChallenge checkout 8818c82df5fa2522809b8105e7018950dcc9a9a8
+
 git clone https://github.com/ustc-huangjiale/Robosynchallengefirststage.git
 cp -a Robosynchallengefirststage/policy/. RoboSynChallenge/policy/
+
 cd RoboSynChallenge
 GIT_LFS_SKIP_SMUDGE=1 uv sync
 (cd policy/pi05 && GIT_LFS_SKIP_SMUDGE=1 uv sync)
 (cd policy/act && GIT_LFS_SKIP_SMUDGE=1 uv sync)
 ```
 
-For the exact retained-tree contract and dependency revisions, see [`policy/README.md`](policy/README.md) and [`policy/DEPENDENCIES.md`](policy/DEPENDENCIES.md).
+Dependency revisions are listed in [`policy/DEPENDENCIES.md`](policy/DEPENDENCIES.md).
 
-## Inference
+## Evaluation
+
+Download the checkpoint into the official repository:
 
 ```bash
-hf download ustc-huangjiale/robosynchallenge-firststage-pi05-click-bell \
-  --include 'ckpt/**' --local-dir checkpoints/click_bell
-bash policy/firststage_click_bell/eval.sh "$PWD/checkpoints/click_bell/ckpt"
+cd RoboSynChallenge
+uvx --from huggingface_hub hf download \
+  ustc-huangjiale/robosynchallenge-firststage-pi05-click-bell \
+  --include 'ckpt/**' \
+  --local-dir checkpoints/click_bell
 ```
 
-Replace `click_bell` with the selected task. See [`policy/README.md`](policy/README.md) for the retained-tree installation contract and all evaluation details.
+Run the official 100-episode evaluation on GPU 0:
+
+```bash
+bash policy/click_bell/eval.sh "$PWD/checkpoints/click_bell/ckpt"
+```
+
+Run a one-episode smoke test:
+
+```bash
+bash policy/click_bell/eval.sh \
+  "$PWD/checkpoints/click_bell/ckpt" \
+  --max_episodes 1
+```
+
+For another task, use the corresponding policy directory and checkpoint repository from the table above.

@@ -1,0 +1,19 @@
+policy_name: drawer_open_place
+task_name: drawer_open_place
+setting: random
+seed: 0
+max_episodes: 100
+max_steps: 900
+eval_expert_check: true
+headless: true
+pytorch_device: cuda:0
+renderer: hybrid
+filter_dataset_saving: true
+eval_video_log: false
+checkpoint_path: null
+train_config_name: pi05_drawer_open_place_stage2_v1
+model_name: drawer_open_place
+checkpoint_id: 2999
+pi0_step: 10
+denormalize_eef_action: true
+instruction_override: "Open the drawer, pick the tomato with the other arm then place it in the drawer."

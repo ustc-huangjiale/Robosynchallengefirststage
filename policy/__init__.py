@@ -1,1 +1,1 @@
-"""RoboSynChallenge first-stage policy submissions."""
+"""RoboSynChallenge task policies."""

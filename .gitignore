@@ -1,7 +1,3 @@
-eval_results/
 __pycache__/
 *.pyc
-hf_sources.local.json
-tasks/*/checkpoint/*
-!tasks/*/checkpoint/README.md
-policy/firststage_*/checkpoint/
+policy/*/checkpoint/
